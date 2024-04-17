@@ -11,6 +11,7 @@
     "format": "prettier --write \"./**/*.{html,vue,ts,js,json,md}\""
   },
   "dependencies": {
+    "element-plus": "^2.7.0",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },
