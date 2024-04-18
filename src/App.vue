@@ -1,20 +1,36 @@
 <template>
-  <div>
-    <!-- <el-button @click="getExcel">click</el-button> -->
-    <el-button el-button @click="getData">click</el-button>
-  </div>
+  <div>{{ playSheet }}</div>
+  <div>{{ allSheet }}</div>
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue'
 import { getSheetData } from './utils/googleSheet'
-function getData() {
-  const id = import.meta.env.VITE_GOOGLE_SHEET_DOC_ID
-  getSheetData(id, 'player')
+
+const sheetId = import.meta.env.VITE_GOOGLE_SHEET_DOC_ID
+const playSheet = ref()
+const allSheet = ref()
+
+function fetchPlayerSheet() {
+  getSheetData(sheetId, 'player')
     .then((data) => {
-      console.log(data)
+      playSheet.value = data
     })
     .catch((err) => {
       console.log(err)
     })
 }
+
+function fetchAllSheet() {
+  getSheetData(sheetId, 'all')
+    .then((data) => {
+      allSheet.value = data
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+}
+
+fetchPlayerSheet()
+fetchAllSheet()
 </script>
