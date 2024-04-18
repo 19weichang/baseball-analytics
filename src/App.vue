@@ -1,5 +1,5 @@
 <template>
-  <div>{{ playSheet }}</div>
+  <div>player: {{ playerSheet }}</div>
   <div>{{ allSheet }}</div>
 </template>
 
@@ -8,13 +8,13 @@ import { ref } from 'vue'
 import { getSheetData } from './utils/googleSheet'
 
 const sheetId = import.meta.env.VITE_GOOGLE_SHEET_DOC_ID
-const playSheet = ref()
+const playerSheet = ref()
 const allSheet = ref()
 
 function fetchPlayerSheet() {
   getSheetData(sheetId, 'player')
     .then((data) => {
-      playSheet.value = data
+      playerSheet.value = data
     })
     .catch((err) => {
       console.log(err)
