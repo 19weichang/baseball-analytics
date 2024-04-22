@@ -61,9 +61,7 @@ function handlePlayer(row: Player) {
   const sheetName = `${row.name}${row.number}`
   getplayer(sheetId, sheetName)
     .then((data) => {
-      data.forEach((player) => {
-        playerInfo.value = player
-      })
+      playerInfo.value = data
       infoLoading.value = false
     })
     .catch((err) => {
