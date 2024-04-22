@@ -22,7 +22,8 @@
   <PlayerInfo
     :isVisible="isVisible"
     :playerInfo="playerInfo"
-    @close="isVisible = false"
+    :infoLoading="infoLoading"
+    @close="closePlayerInfo"
   />
 </template>
 
@@ -34,7 +35,8 @@ import { Player } from '../api/players/types'
 import PlayerInfo from '../components/player/playerInfo.vue'
 
 const player = ref<Player[]>([])
-const loading = ref(false)
+const loading = ref<boolean>(false)
+const infoLoading = ref<boolean>(false)
 const sheetId = import.meta.env.VITE_GOOGLE_SHEET_DOC_ID
 const isVisible = ref(false)
 const playerInfo = ref<Player>()
@@ -55,14 +57,24 @@ function fetchPlayerSheet() {
 
 function handlePlayer(row: Player) {
   isVisible.value = true
+  infoLoading.value = true
   const sheetName = `${row.name}${row.number}`
   getplayer(sheetId, sheetName)
     .then((data) => {
-      playerInfo.value = data
+      data.forEach((player) => {
+        playerInfo.value = player
+      })
+      infoLoading.value = false
     })
     .catch((err) => {
       console.log(err)
+      infoLoading.value = false
     })
+}
+
+function closePlayerInfo() {
+  isVisible.value = false
+  playerInfo.value = undefined
 }
 
 function fetchGame() {

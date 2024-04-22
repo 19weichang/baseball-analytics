@@ -49,8 +49,16 @@ export function isVaildKey(
   return key in object
 }
 
-export function getplayer(sheetId: string, player: string) {
-  return fetch(
-    `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${player}?key=${key}`
-  ).then((res) => res.json())
+export async function getplayer(sheetId: string, player: string) {
+  const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=xlsx`
+  const file = new Promise((resolve) => {
+    const callback = (workbook: xlsx.WorkBook) => {
+      const sheet = workbook.Sheets[player]
+      const json = utils.sheet_to_json(sheet)
+      resolve(json)
+    }
+    readWorkbookFromRemoteFile(sheetUrl, callback)
+  })
+
+  return file as Promise<Player[]>
 }
