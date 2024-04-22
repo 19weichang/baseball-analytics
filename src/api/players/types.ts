@@ -79,7 +79,7 @@ export enum PlayerEnglish {
 }
 
 export interface Player {
-  nunber: number // 背號
+  number: number // 背號
   name: string // 姓名
   age: number // 年齡
   position: string // 守備位置

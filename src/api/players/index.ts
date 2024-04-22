@@ -48,3 +48,9 @@ export function isVaildKey(
 ): key is keyof typeof object {
   return key in object
 }
+
+export function getplayer(sheetId: string, player: string) {
+  return fetch(
+    `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${player}?key=${key}`
+  ).then((res) => res.json())
+}
