@@ -20,7 +20,8 @@ export function getGame(game: string) {
 
 export function getAllGames() {
   const url = `https://sheets.googleapis.com/v4/spreadsheets/${gameSheetId}?key=${key}`
-  fetch(url)
+  const games: string[] = []
+  return fetch(url)
     .then((response) => response.json())
     .then((data) => {
       const sheetsInfo = data.sheets
@@ -28,10 +29,12 @@ export function getAllGames() {
         sheetsInfo.forEach((sheet: { properties: { title: string } }) => {
           console.log(sheet.properties.title)
           // console.log(sheet.properties.sheetId)
+          return games.push(sheet.properties.title)
         })
       } else {
         console.log('No sheets found in the spreadsheet.')
       }
+      return games
     })
     .catch((error) => {
       console.error('Error fetching sheet data:', error)

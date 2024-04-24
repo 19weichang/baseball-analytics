@@ -31,8 +31,10 @@
           </div>
           <div v-else>暫無選手資料</div>
         </el-tab-pane>
-        <el-tab-pane label="進階數據"></el-tab-pane>
-        <el-tab-pane label="對戰成績"></el-tab-pane>
+        <el-tab-pane label="進階數據"> </el-tab-pane>
+        <el-tab-pane label="對戰成績">
+          <BattleGame :games="games" />
+        </el-tab-pane>
       </el-tabs>
     </div>
   </el-dialog>
@@ -41,10 +43,12 @@
 <script lang="ts" setup>
 import { defineProps } from 'vue'
 import { Player } from '../../api/players/types'
+import BattleGame from '../battle/battleGame.vue'
 
 const props = defineProps<{
   isVisible: boolean
   playerInfo: Player | undefined
   infoLoading: boolean
+  games: string[]
 }>()
 </script>

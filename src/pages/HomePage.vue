@@ -23,6 +23,7 @@
     :isVisible="isVisible"
     :playerInfo="playerInfo"
     :infoLoading="infoLoading"
+    :games="games"
     @close="closePlayerInfo"
   />
 </template>
@@ -40,6 +41,7 @@ const infoLoading = ref<boolean>(false)
 const sheetId = import.meta.env.VITE_GOOGLE_SHEET_DOC_ID
 const isVisible = ref(false)
 const playerInfo = ref<Player>()
+const games = ref<string[]>([])
 
 function fetchPlayerSheet() {
   loading.value = true
@@ -76,7 +78,11 @@ function closePlayerInfo() {
 }
 
 function fetchAllGames() {
-  getAllGames()
+  getAllGames().then((data) => {
+    if (data) {
+      games.value = data
+    }
+  })
 }
 
 function fetchGame() {
