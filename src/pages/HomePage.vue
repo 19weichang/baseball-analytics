@@ -30,7 +30,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { getPlayers, getplayer } from '../api/players/index'
-import { getGame } from '../api/games/index'
+import { getGame, getAllGames } from '../api/games/index'
 import { Player } from '../api/players/types'
 import PlayerInfo from '../components/player/playerInfo.vue'
 
@@ -75,6 +75,10 @@ function closePlayerInfo() {
   playerInfo.value = undefined
 }
 
+function fetchAllGames() {
+  getAllGames()
+}
+
 function fetchGame() {
   const sheetName = '2024-04-21-復仇者'
   getGame(sheetName)
@@ -87,5 +91,6 @@ function fetchGame() {
 }
 
 fetchPlayerSheet()
+fetchAllGames()
 fetchGame()
 </script>
