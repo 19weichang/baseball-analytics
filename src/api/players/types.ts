@@ -9,9 +9,8 @@ export enum PlayerChinese {
   defense = '守備',
   arm = '傳球',
   GP = '出賽場數',
-  BA = '打擊率',
+  AVG = '打擊率',
   BB = '保送',
-  H = '安打',
   GOAO = '滾飛比',
   HBP = '觸身球',
   HR = '全壘打',
@@ -34,8 +33,10 @@ export enum PlayerChinese {
   R = '得分',
   RBI = '打點',
   SF = '高飛犧牲打',
+  GO = '滾地球',
   SH = '犧牲觸擊',
-  TA = '攻擊指數'
+  TA = '攻擊指數',
+  ERRCH = '失誤上壘'
 }
 
 export enum PlayerEnglish {
@@ -49,9 +50,8 @@ export enum PlayerEnglish {
   '守備' = 'defense',
   '傳球' = 'arm',
   '出賽場數' = 'GP',
-  '打擊率' = 'BA',
+  '打擊率' = 'AVG',
   '保送' = 'BB',
-  '安打' = 'H',
   '滾飛比' = 'GOAO',
   '觸身球' = 'HBP',
   '全壘打' = 'HR',
@@ -74,8 +74,10 @@ export enum PlayerEnglish {
   '得分' = 'R',
   '打點' = 'RBI',
   '高飛犧牲打' = 'SF',
+  '滾地球' = 'GO',
   '犧牲觸擊' = 'SH',
-  '攻擊指數' = 'TA'
+  '攻擊指數' = 'TA',
+  '失誤' = 'ERRCH'
 }
 
 export interface Player {
@@ -89,9 +91,8 @@ export interface Player {
   defense: string // 守備能力
   arm: string // 傳球能力
   GP: number // 出賽場數
-  BA: number // 打擊率
+  AVG: number // 打擊率
   BB: number // 保送
-  H: number // 安打
   GOAO: number // 滾飛比
   HBP: number // 觸身球
   HR: number // 全壘打
@@ -114,6 +115,51 @@ export interface Player {
   R: number // 得分
   RBI: number // 打點
   SF: number // 高飛犧牲打
+  GO: number // 滾地球
   SH: number // 犧牲觸擊
   TA: number // 攻擊指數
+  ERRCH: number // 失誤上壘
+}
+
+export function emptyPlayer(): Player {
+  return {
+    number: 0,
+    name: '',
+    age: 0,
+    position: '',
+    gradeIndex: 0,
+    hit: '',
+    speed: '',
+    defense: '',
+    arm: '',
+    GP: 0,
+    AVG: 0,
+    BB: 0,
+    GOAO: 0,
+    HBP: 0,
+    HR: 0,
+    SO: 0,
+    SLG: 0,
+    AB: 0,
+    SingleB: 0,
+    DoubleB: 0,
+    TripleB: 0,
+    AO: 0,
+    BBP: 0,
+    BBK: 0,
+    EBH: 0,
+    DP: 0,
+    GS: 0,
+    IsoP: 0,
+    OBP: 0,
+    OPS: 0,
+    PA: 0,
+    R: 0,
+    RBI: 0,
+    SF: 0,
+    GO: 0,
+    SH: 0,
+    TA: 0,
+    ERRCH: 0
+  }
 }

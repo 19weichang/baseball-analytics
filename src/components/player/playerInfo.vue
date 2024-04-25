@@ -12,7 +12,7 @@
         <el-tab-pane label="生涯數據">
           <div v-if="playerInfo">
             <el-table
-              :data="playerInfo"
+              :data="[playerInfo]"
               height="250"
               style="width: 100%"
               empty-text="暫無數據"
@@ -33,7 +33,7 @@
         </el-tab-pane>
         <el-tab-pane label="進階數據"> </el-tab-pane>
         <el-tab-pane label="對戰成績">
-          <BattleGame :games="games" />
+          <BattleGame :games="games" :playerInfo="playerInfo" />
         </el-tab-pane>
       </el-tabs>
     </div>

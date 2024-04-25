@@ -59,6 +59,6 @@ export async function getplayer(sheetId: string, player: string) {
     }
     readWorkbookFromRemoteFile(sheetUrl, callback)
   })
-
-  return file as Promise<Player>
+  const playerInfo: Player[] = (await file) as Player[]
+  return playerInfo[0]
 }

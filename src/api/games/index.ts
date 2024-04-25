@@ -1,6 +1,7 @@
 import * as xlsx from 'xlsx'
 import { readWorkbookFromRemoteFile } from '../../utils/xlsx'
 import { utils } from 'xlsx'
+import { Game } from './types'
 
 const gameSheetId = import.meta.env.VITE_SHEET_GAME_ID
 const key = import.meta.env.VITE_GOOGLE_API_KEY
@@ -15,7 +16,7 @@ export function getGame(game: string) {
     }
     readWorkbookFromRemoteFile(sheetUrl, callback)
   })
-  return file
+  return file as Promise<Game[]>
 }
 
 export function getAllGames() {
