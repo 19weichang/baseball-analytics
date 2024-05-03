@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-table
-      :data="history"
+      :data="props.games"
       height="250"
       style="width: 100%"
       empty-text="暫無數據"
@@ -25,35 +25,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, defineProps } from 'vue'
-import { getGame } from '../../api/games/index'
-import { Player } from '../../api/players/types'
+import { defineProps } from 'vue'
 import { Game } from '../../api/games/types'
 
 const props = defineProps<{
-  games: string[]
-  playerInfo: Player | undefined
+  games: Game[]
 }>()
-
-const history = ref<Game[]>([])
-
-function filterGame(sheetName: string) {
-  getGame(sheetName).then((gameSheet) => {
-    gameSheet.forEach((game) => {
-      if (game.player === props.playerInfo?.name) {
-        console.log('match', game.position)
-        history.value.push(game)
-      }
-    })
-  })
-}
-
-function getPlayerGame() {
-  const games = props.games
-  games.forEach((game) => {
-    filterGame(game)
-  })
-}
-
-getPlayerGame()
 </script>

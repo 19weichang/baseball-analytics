@@ -3,41 +3,16 @@ import { readWorkbookFromRemoteFile } from '../../utils/xlsx'
 import { utils } from 'xlsx'
 import { Game } from './types'
 
-const gameSheetId = import.meta.env.VITE_SHEET_GAME_ID
-const key = import.meta.env.VITE_GOOGLE_API_KEY
-
-export function getGame(game: string) {
-  const sheetUrl = `https://docs.google.com/spreadsheets/d/${gameSheetId}/export?format=xlsx`
+export async function getGame(sheetId: string, player: string) {
+  const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=xlsx`
   const file = new Promise((resolve) => {
     const callback = (workbook: xlsx.WorkBook) => {
-      const sheet = workbook.Sheets[game]
+      const sheet = workbook.Sheets[player]
       const json = utils.sheet_to_json(sheet)
       resolve(json)
     }
     readWorkbookFromRemoteFile(sheetUrl, callback)
   })
-  return file as Promise<Game[]>
-}
-
-export function getAllGames() {
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${gameSheetId}?key=${key}`
-  const games: string[] = []
-  return fetch(url)
-    .then((response) => response.json())
-    .then((data) => {
-      const sheetsInfo = data.sheets
-      if (sheetsInfo && sheetsInfo.length) {
-        sheetsInfo.forEach((sheet: { properties: { title: string } }) => {
-          console.log(sheet.properties.title)
-          // console.log(sheet.properties.sheetId)
-          return games.push(sheet.properties.title)
-        })
-      } else {
-        console.log('No sheets found in the spreadsheet.')
-      }
-      return games
-    })
-    .catch((error) => {
-      console.error('Error fetching sheet data:', error)
-    })
+  const game: Game[] = (await file) as Game[]
+  return game
 }

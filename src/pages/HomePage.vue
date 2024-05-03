@@ -31,9 +31,10 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { getPlayers, getplayerCareer } from '../api/players/index'
-import { getGame, getAllGames } from '../api/games/index'
 import { Player, PlayerCareer } from '../api/players/types'
 import PlayerInfo from '../components/player/playerInfo.vue'
+import { getGame } from '../api/games/index'
+import { Game } from '../api/games/types'
 
 const player = ref<Player[]>([])
 const loading = ref<boolean>(false)
@@ -41,7 +42,7 @@ const infoLoading = ref<boolean>(false)
 const sheetId = import.meta.env.VITE_GOOGLE_SHEET_DOC_ID
 const isVisible = ref(false)
 const playerCareer = ref<PlayerCareer[]>([])
-const games = ref<string[]>([])
+const games = ref<Game[]>([])
 
 function fetchPlayerSheet() {
   loading.value = true
@@ -61,9 +62,14 @@ function handlePlayer(row: Player) {
   isVisible.value = true
   infoLoading.value = true
   const sheetName = `${row.name}${row.number}`
-  getplayerCareer(sheetId, sheetName)
-    .then((data) => {
-      playerCareer.value = data
+
+  Promise.all([
+    getplayerCareer(sheetId, sheetName),
+    getGame(sheetId, sheetName)
+  ])
+    .then(([career, gameSheet]) => {
+      playerCareer.value = career
+      games.value = gameSheet
       infoLoading.value = false
     })
     .catch((err) => {
@@ -77,26 +83,5 @@ function closePlayerInfo() {
   playerCareer.value = []
 }
 
-function fetchAllGames() {
-  getAllGames().then((data) => {
-    if (data) {
-      games.value = data
-    }
-  })
-}
-
-function fetchGame() {
-  const sheetName = '2024-04-21-復仇者'
-  getGame(sheetName)
-    .then((data) => {
-      console.log(data)
-    })
-    .finally(() => {
-      loading.value = false
-    })
-}
-
 fetchPlayerSheet()
-fetchAllGames()
-fetchGame()
 </script>

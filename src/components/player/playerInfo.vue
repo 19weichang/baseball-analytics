@@ -37,7 +37,7 @@
         </el-tab-pane>
         <el-tab-pane label="進階數據"> </el-tab-pane>
         <el-tab-pane label="對戰成績">
-          <!-- <BattleGame :games="games" :playerInfo="playerInfo" /> -->
+          <BattleGame :games="games" />
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -47,12 +47,13 @@
 <script lang="ts" setup>
 import { defineProps } from 'vue'
 import { PlayerCareer } from '../../api/players/types'
-// import BattleGame from '../battle/battleGame.vue'
+import BattleGame from '../battle/battleGame.vue'
+import { Game } from '../../api/games/types'
 
 const props = defineProps<{
   isVisible: boolean
   playerCareer: PlayerCareer[]
   infoLoading: boolean
-  games: string[]
+  games: Game[]
 }>()
 </script>
