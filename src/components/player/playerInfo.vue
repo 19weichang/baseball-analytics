@@ -29,7 +29,7 @@
               <el-table-column prop="ERRCH" label="失誤" />
               <el-table-column prop="AVG" label="AVG" />
               <el-table-column prop="OBP" label="上壘率" />
-              <el-table-column prop="SLG" label="高飛犧牲打" />
+              <el-table-column prop="SLG" label="長打率" />
               <el-table-column prop="OPS" label="OPS" />
             </el-table>
           </div>
