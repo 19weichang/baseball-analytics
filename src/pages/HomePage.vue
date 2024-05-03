@@ -21,7 +21,7 @@
   </el-card>
   <PlayerInfo
     :isVisible="isVisible"
-    :playerInfo="playerInfo"
+    :playerCareer="playerCareer"
     :infoLoading="infoLoading"
     :games="games"
     @close="closePlayerInfo"
@@ -30,9 +30,9 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { getPlayers, getplayer } from '../api/players/index'
+import { getPlayers, getplayerCareer } from '../api/players/index'
 import { getGame, getAllGames } from '../api/games/index'
-import { Player } from '../api/players/types'
+import { Player, PlayerCareer } from '../api/players/types'
 import PlayerInfo from '../components/player/playerInfo.vue'
 
 const player = ref<Player[]>([])
@@ -40,7 +40,7 @@ const loading = ref<boolean>(false)
 const infoLoading = ref<boolean>(false)
 const sheetId = import.meta.env.VITE_GOOGLE_SHEET_DOC_ID
 const isVisible = ref(false)
-const playerInfo = ref<Player>()
+const playerCareer = ref<PlayerCareer[]>([])
 const games = ref<string[]>([])
 
 function fetchPlayerSheet() {
@@ -61,9 +61,9 @@ function handlePlayer(row: Player) {
   isVisible.value = true
   infoLoading.value = true
   const sheetName = `${row.name}${row.number}`
-  getplayer(sheetId, sheetName)
+  getplayerCareer(sheetId, sheetName)
     .then((data) => {
-      playerInfo.value = data
+      playerCareer.value = data
       infoLoading.value = false
     })
     .catch((err) => {
@@ -74,7 +74,7 @@ function handlePlayer(row: Player) {
 
 function closePlayerInfo() {
   isVisible.value = false
-  playerInfo.value = undefined
+  playerCareer.value = []
 }
 
 function fetchAllGames() {

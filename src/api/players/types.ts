@@ -163,3 +163,45 @@ export function emptyPlayer(): Player {
     ERRCH: 0
   }
 }
+
+export interface PlayerCareer {
+  season: number
+  PA: number
+  SingleB: number
+  DoubleB: number
+  TripleB: number
+  HR: number
+  RBI: number
+  R: number
+  BB: number
+  SO: number
+  SF: number
+  SH: number
+  ERRCH: number
+  AVG: number
+  OBP: number
+  SLG: number
+  OPS: number
+}
+
+export function emptyPlayerCareer(): PlayerCareer {
+  return {
+    season: 0,
+    PA: 0,
+    SingleB: 0,
+    DoubleB: 0,
+    TripleB: 0,
+    HR: 0,
+    RBI: 0,
+    R: 0,
+    BB: 0,
+    SO: 0,
+    SF: 0,
+    SH: 0,
+    ERRCH: 0,
+    AVG: 0,
+    OBP: 0,
+    SLG: 0,
+    OPS: 0
+  }
+}
