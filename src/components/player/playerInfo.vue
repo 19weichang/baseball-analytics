@@ -7,7 +7,7 @@
   >
     <div v-loading="infoLoading">
       <el-card>
-        <el-row>
+        <el-row v-show="!infoLoading">
           <el-col :span="6">
             <el-avatar
               v-if="props.player?.img"
