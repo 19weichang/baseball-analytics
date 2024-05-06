@@ -2,7 +2,7 @@
   <el-card>
     <el-table
       v-loading="loading"
-      :data="player"
+      :data="players"
       height="250"
       style="width: 100%"
       empty-text="暫無數據"
@@ -21,6 +21,7 @@
   </el-card>
   <PlayerInfo
     :isVisible="isVisible"
+    :player="player"
     :playerCareer="playerCareer"
     :infoLoading="infoLoading"
     :games="games"
@@ -36,19 +37,20 @@ import PlayerInfo from '../components/player/playerInfo.vue'
 import { getGame } from '../api/games/index'
 import { Game } from '../api/games/types'
 
-const player = ref<Player[]>([])
+const players = ref<Player[]>([])
 const loading = ref<boolean>(false)
 const infoLoading = ref<boolean>(false)
 const sheetId = import.meta.env.VITE_GOOGLE_SHEET_DOC_ID
 const isVisible = ref(false)
 const playerCareer = ref<PlayerCareer[]>([])
 const games = ref<Game[]>([])
+const player = ref<Player>()
 
 function fetchPlayerSheet() {
   loading.value = true
   getPlayers(sheetId)
     .then((data) => {
-      player.value = data
+      players.value = data
     })
     .catch((err) => {
       console.log(err)
@@ -70,6 +72,7 @@ function handlePlayer(row: Player) {
     .then(([career, gameSheet]) => {
       playerCareer.value = career
       games.value = gameSheet
+      player.value = row
       infoLoading.value = false
     })
     .catch((err) => {
