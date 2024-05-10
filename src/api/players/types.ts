@@ -181,7 +181,7 @@ export function emptyPlayer(): Player {
 }
 
 export interface PlayerCareer {
-  season: number
+  season: string
   PA: number
   SingleB: number
   DoubleB: number
@@ -202,7 +202,7 @@ export interface PlayerCareer {
 
 export function emptyPlayerCareer(): PlayerCareer {
   return {
-    season: 0,
+    season: '',
     PA: 0,
     SingleB: 0,
     DoubleB: 0,

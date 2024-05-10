@@ -95,9 +95,9 @@ export async function getplayerCareer(sheetId: string, player: string) {
     const SLG = item.SLG
     const OPS = item.OPS
 
-    if (!result[season]) {
-      result[season] = {
-        season: 0,
+    if (!result[parseInt(season)]) {
+      result[parseInt(season)] = {
+        season: '',
         PA: 0,
         SingleB: 0,
         DoubleB: 0,
@@ -117,22 +117,22 @@ export async function getplayerCareer(sheetId: string, player: string) {
       }
     }
 
-    result[season].PA += PA
-    result[season].SingleB += SingleB
-    result[season].DoubleB += DoubleB
-    result[season].TripleB += TripleB
-    result[season].HR += HR
-    result[season].RBI += RBI
-    result[season].R += R
-    result[season].BB += BB
-    result[season].SO += SO
-    result[season].SF += SF
-    result[season].SH += SH
-    result[season].ERRCH += ERRCH
-    result[season].AVG += AVG
-    result[season].OBP += OBP
-    result[season].SLG += SLG
-    result[season].OPS += OPS
+    result[parseInt(season)].PA += PA
+    result[parseInt(season)].SingleB += SingleB
+    result[parseInt(season)].DoubleB += DoubleB
+    result[parseInt(season)].TripleB += TripleB
+    result[parseInt(season)].HR += HR
+    result[parseInt(season)].RBI += RBI
+    result[parseInt(season)].R += R
+    result[parseInt(season)].BB += BB
+    result[parseInt(season)].SO += SO
+    result[parseInt(season)].SF += SF
+    result[parseInt(season)].SH += SH
+    result[parseInt(season)].ERRCH += ERRCH
+    result[parseInt(season)].AVG += AVG
+    result[parseInt(season)].OBP += OBP
+    result[parseInt(season)].SLG += SLG
+    result[parseInt(season)].OPS += OPS
   }
 
   const careerArray = Object.entries(result).map(
@@ -178,8 +178,13 @@ export async function getplayerCareer(sheetId: string, player: string) {
   )
   const arr = careerArray.map((item) => ({
     ...item,
-    season: Number(item.season)
+    season: item.season
   }))
 
   return arr
 }
+
+// export function getplayer(sheetId: string, player: string) {
+//   const sheetUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${player}?key=${key}`
+//   return fetch(sheetUrl).then((res) => res.json())
+// }

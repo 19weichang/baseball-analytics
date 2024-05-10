@@ -49,6 +49,8 @@
                 height="250"
                 style="width: 100%"
                 empty-text="暫無數據"
+                show-summary
+                :summary-method="getSummary"
               >
                 <el-table-column fixed prop="season" label="球季" />
                 <el-table-column prop="PA" label="打席數" />
@@ -82,10 +84,11 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps } from 'vue'
+import { defineProps, computed } from 'vue'
 import { Player, PlayerCareer } from '../../api/players/types'
 import BattleGame from '../battle/battleGame.vue'
 import { Game } from '../../api/games/types'
+import { TableColumnCtx } from 'element-plus'
 
 const props = defineProps<{
   isVisible: boolean
@@ -97,4 +100,51 @@ const props = defineProps<{
 
 const emptyImage =
   'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'
+
+interface SummaryMethod<T> {
+  columns: TableColumnCtx<T>[]
+  data: T[]
+}
+
+const getSummary = computed(() => {
+  return (item: SummaryMethod<PlayerCareer>) => {
+    const { columns, data } = item
+    const sum: PlayerCareer[] = []
+    columns.forEach((column, index) => {
+      if (index === 0) {
+        sum[index] = '總計' as unknown as PlayerCareer
+        return
+      }
+
+      const values = data.map((item) =>
+        Number(item[column.property as keyof PlayerCareer])
+      )
+
+      if (
+        column.property === 'AVG' ||
+        column.property === 'OBP' ||
+        column.property === 'SLG' ||
+        column.property === 'OPS'
+      ) {
+        if (values.length === 0) {
+          sum[index] = 0 as unknown as PlayerCareer
+        } else {
+          sum[index] = (values.reduce((a: number, b: number) => a + b) /
+            values.length) as unknown as PlayerCareer
+        }
+      } else {
+        if (values.length === 0) {
+          sum[index] = 0 as unknown as PlayerCareer
+        } else {
+          sum[index] = values.reduce(
+            (acc: number, cur: number) => acc + cur,
+            0
+          ) as unknown as PlayerCareer
+        }
+      }
+      return
+    })
+    return sum
+  }
+})
 </script>
