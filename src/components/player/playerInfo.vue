@@ -43,9 +43,9 @@
         </el-row>
         <el-tabs type="border-card">
           <el-tab-pane label="生涯數據">
-            <div v-if="playerCareer">
+            <div v-if="playerCareer?.hitter">
               <el-table
-                :data="playerCareer"
+                :data="playerCareer?.hitter"
                 height="250"
                 style="width: 100%"
                 empty-text="暫無數據"
@@ -93,7 +93,7 @@ import { TableColumnCtx } from 'element-plus'
 const props = defineProps<{
   isVisible: boolean
   player: Player | undefined
-  playerCareer: PlayerCareer[]
+  playerCareer: PlayerCareer | undefined
   infoLoading: boolean
   games: Game[]
 }>()

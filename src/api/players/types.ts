@@ -131,6 +131,7 @@ export interface Player {
   // SH: number // 犧牲觸擊
   // TA: number // 攻擊指數
   // ERRCH: number // 失誤上壘
+  hitter: Hitter
 }
 
 export function emptyPlayer(): Player {
@@ -147,7 +148,7 @@ export function emptyPlayer(): Player {
     arm: '',
     height: 0,
     weight: 0,
-    pitchingAndHiterHabits: ''
+    pitchingAndHiterHabits: '',
     // GP: 0,
     // AVG: 0,
     // BB: 0,
@@ -177,10 +178,23 @@ export function emptyPlayer(): Player {
     // SH: 0,
     // TA: 0,
     // ERRCH: 0
+    hitter: emptyHitter()
   }
 }
 
 export interface PlayerCareer {
+  name: string
+  hitter: Hitter
+}
+
+export function emptyPlayerCareer(): PlayerCareer {
+  return {
+    name: '',
+    hitter: emptyHitter()
+  }
+}
+
+export interface Hitter {
   season: string
   PA: number
   SingleB: number
@@ -200,7 +214,7 @@ export interface PlayerCareer {
   OPS: number
 }
 
-export function emptyPlayerCareer(): PlayerCareer {
+export function emptyHitter(): Hitter {
   return {
     season: '',
     PA: 0,

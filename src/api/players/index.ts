@@ -1,7 +1,7 @@
 // import { read } from '../../utils/xlsx'
 import * as xlsx from 'xlsx'
 import { readWorkbookFromRemoteFile } from '../../utils/xlsx'
-import { Player, PlayerEnglish, PlayerCareer } from './types'
+import { Player, PlayerEnglish, Hitter } from './types'
 import { utils } from 'xlsx'
 
 const key = import.meta.env.VITE_GOOGLE_API_KEY
@@ -63,7 +63,7 @@ export async function getplayer(sheetId: string, player: string) {
   return playerInfo[0]
 }
 
-export async function getplayerCareer(sheetId: string, player: string) {
+export async function getPlayerHitter(sheetId: string, player: string) {
   const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=xlsx`
   const file = new Promise((resolve) => {
     const callback = (workbook: xlsx.WorkBook) => {
@@ -73,8 +73,8 @@ export async function getplayerCareer(sheetId: string, player: string) {
     }
     readWorkbookFromRemoteFile(sheetUrl, callback)
   })
-  const playerInfo: PlayerCareer[] = (await file) as PlayerCareer[]
-  const result: PlayerCareer[] = []
+  const playerInfo: Hitter[] = (await file) as Hitter[]
+  const result: Hitter[] = []
   for (const key in playerInfo) {
     const item = playerInfo[key]
     const season = item.season
