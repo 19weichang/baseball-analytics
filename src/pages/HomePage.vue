@@ -3,26 +3,44 @@
     <el-row>
       <!-- 安打王 -->
       <el-col :xs="24" :sm="8" style="padding: 10px 0px">
-        <el-table class="rankTable" :data="[]" style="width: 100%">
-          <el-table-column fixed prop="number" label="No" width="50" />
+        <p class="title">安打王</p>
+        <el-table
+          v-loading="rankHitLoading || loading"
+          class="rankTable"
+          :data="filterPlayerHit"
+          style="width: 100%"
+        >
+          <el-table-column fixed type="index" label="排名" width="100" />
           <el-table-column prop="name" label="姓名" />
-          <el-table-column prop="" label="安打" />
+          <el-table-column prop="hit" label="安打" />
         </el-table>
       </el-col>
       <!-- 打點王 -->
       <el-col :xs="24" :sm="8" style="padding: 10px 0px">
-        <el-table class="rankTable" :data="[]" style="width: 100%">
-          <el-table-column fixed prop="number" label="No" width="50" />
+        <p class="title">打點王</p>
+        <el-table
+          v-loading="rankRBILoading || loading"
+          class="rankTable"
+          :data="filterPlayerRBI"
+          style="width: 100%"
+        >
+          <el-table-column fixed type="index" label="排名" width="100" />
           <el-table-column prop="name" label="姓名" />
-          <el-table-column prop="" label="打點" />
+          <el-table-column prop="rbi" label="打點" />
         </el-table>
       </el-col>
       <!-- 全壘打王 -->
       <el-col :xs="24" :sm="8" style="padding: 10px 0px">
-        <el-table class="rankTable" :data="[]" style="width: 100%">
-          <el-table-column fixed prop="number" label="No" width="50" />
+        <p class="title">全壘打王</p>
+        <el-table
+          v-loading="rankHRLoading || loading"
+          class="rankTable"
+          :data="filterPlayerHR"
+          style="width: 100%"
+        >
+          <el-table-column fixed type="index" label="排名" width="100" />
           <el-table-column prop="name" label="姓名" />
-          <el-table-column prop="" label="全壘打" />
+          <el-table-column prop="hr" label="全壘打" />
         </el-table>
       </el-col>
     </el-row>
@@ -66,14 +84,15 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { getPlayers, getPlayerHitter } from '../api/players/index'
-import { Player, PlayerCareer } from '../api/players/types'
+import { Player, PlayerCareer, Hitter } from '../api/players/types'
 import PlayerInfo from '../components/player/playerInfo.vue'
 import { getGame } from '../api/games/index'
 import { Game } from '../api/games/types'
 
 const players = ref<Player[]>([])
+const playerLength = ref<number>(0)
 const loading = ref<boolean>(false)
 const infoLoading = ref<boolean>(false)
 const sheetId = import.meta.env.VITE_GOOGLE_SHEET_DOC_ID
@@ -83,11 +102,71 @@ const playerCareer = ref<PlayerCareer>()
 const games = ref<Game[]>([])
 const player = ref<Player>()
 
+const filterPlayerHit = computed(() => {
+  if (playersCareer.value.length !== playerLength.value) return []
+  return playersCareer.value
+    .map((player) => {
+      return {
+        name: player.name,
+        hit: Array.isArray(player.hitter)
+          ? player.hitter.reduce(
+              (acc: number, cur: Hitter) =>
+                acc + cur.SingleB + cur.DoubleB + cur.TripleB + cur.HR,
+              0
+            )
+          : 0
+      }
+    })
+    .sort((a, b) => b.hit - a.hit)
+    .slice(0, 5)
+})
+
+const rankHitLoading = computed(() => {
+  return playersCareer.value.length == playerLength.value ? false : true
+})
+
+const filterPlayerRBI = computed(() => {
+  return playersCareer.value
+    .map((player) => {
+      return {
+        name: player.name,
+        rbi: Array.isArray(player.hitter)
+          ? player.hitter.reduce((acc: number, cur: Hitter) => acc + cur.RBI, 0)
+          : 0
+      }
+    })
+    .sort((a, b) => b.rbi - a.rbi)
+    .slice(0, 5)
+})
+
+const rankRBILoading = computed(() => {
+  return playersCareer.value.length == playerLength.value ? false : true
+})
+
+const filterPlayerHR = computed(() => {
+  return playersCareer.value
+    .map((player) => {
+      return {
+        name: player.name,
+        hr: Array.isArray(player.hitter)
+          ? player.hitter.reduce((acc: number, cur: Hitter) => acc + cur.HR, 0)
+          : 0
+      }
+    })
+    .sort((a, b) => b.hr - a.hr)
+    .slice(0, 5)
+})
+
+const rankHRLoading = computed(() => {
+  return playersCareer.value.length == playerLength.value ? false : true
+})
+
 function fetchPlayerSheet() {
   loading.value = true
   getPlayers(sheetId)
     .then((data) => {
       players.value = data
+      playerLength.value = data.length
       fetchPlayersCareer(data)
     })
     .catch((err) => {
@@ -103,7 +182,6 @@ function fetchPlayersCareer(players: Player[]) {
     getPlayerHitter(sheetId, `${player.name}${player.number}`)
       .then((data) => {
         playersCareer.value.push(Object.assign(player, { hitter: data }))
-        console.log('playersCareer', playersCareer.value)
       })
       .catch((err) => {
         console.log(err)
@@ -115,21 +193,21 @@ function handlePlayer(row: Player) {
   isVisible.value = true
   infoLoading.value = true
   const sheetName = `${row.name}${row.number}`
+  const CareerList = playersCareer.value
   playerCareer.value =
-    playersCareer.value[
-      playersCareer.value.map((item) => item.name).indexOf(row.name)
-    ]
-
-  getGame(sheetId, sheetName)
-    .then((gameSheet) => {
-      games.value = gameSheet
-      player.value = row
-      infoLoading.value = false
-    })
-    .catch((err) => {
-      console.log(err)
-      infoLoading.value = false
-    })
+    CareerList[CareerList.map((item) => item.name).indexOf(row.name)]
+  if (playerCareer.value) {
+    getGame(sheetId, sheetName)
+      .then((gameSheet) => {
+        games.value = gameSheet
+        player.value = row
+        infoLoading.value = false
+      })
+      .catch((err) => {
+        console.log(err)
+        infoLoading.value = false
+      })
+  }
 }
 
 function closePlayerInfo() {
@@ -153,6 +231,12 @@ fetchPlayerSheet()
 .homePageTable {
   border: 2px solid #e9e9e9;
   border-radius: 5px;
+  margin: 10px 0px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 400;
   margin: 10px 0px;
 }
 </style>
