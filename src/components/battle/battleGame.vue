@@ -16,6 +16,12 @@
       <el-table-column prop="R" label="得分" />
       <el-table-column prop="BB" label="四壞" />
       <el-table-column prop="SO" label="三振" />
+      <el-table-column prop="SF" label="高飛犧牲打" />
+      <el-table-column prop="SH" label="犧牲觸擊" />
+      <el-table-column prop="ERRCH" label="失誤" />
+      <el-table-column prop="SB" label="盜壘成功" />
+      <el-table-column prop="CS" label="盜壘失敗" />
+      <el-table-column prop="SBP" label="盜壘成功率" :formatter="changeWord" />
       <el-table-column prop="AVG" label="AVG" />
       <el-table-column prop="OBP" label="上壘率" />
       <el-table-column prop="SLG" label="長打率" />
@@ -27,8 +33,17 @@
 <script lang="ts" setup>
 import { defineProps } from 'vue'
 import { Game } from '../../api/games/types'
+import { Hitter } from '../../api/players/types'
 
 const props = defineProps<{
   games: Game[]
 }>()
+
+function changeWord(row: Hitter) {
+  if (typeof row.SBP === 'number') {
+    return row.SBP
+  } else {
+    return 0
+  }
+}
 </script>

@@ -40,7 +40,10 @@ export enum PlayerChinese {
   GO = '滾地球',
   SH = '犧牲觸擊',
   TA = '攻擊指數',
-  ERRCH = '失誤上壘'
+  ERRCH = '失誤上壘',
+  SB = '盜壘',
+  CS = '盜壘失敗',
+  SBP = '盜壘成功率'
 }
 
 export enum PlayerEnglish {
@@ -85,7 +88,10 @@ export enum PlayerEnglish {
   '滾地球' = 'GO',
   '犧牲觸擊' = 'SH',
   '攻擊指數' = 'TA',
-  '失誤' = 'ERRCH'
+  '失誤' = 'ERRCH',
+  '盜壘' = 'SB',
+  '盜壘失敗' = 'CS',
+  '盜壘成功率' = 'SBP'
 }
 
 export interface Player {
@@ -212,6 +218,9 @@ export interface Hitter {
   OBP: number
   SLG: number
   OPS: number
+  SB: number
+  CS: number
+  SBP: number
 }
 
 export function emptyHitter(): Hitter {
@@ -232,6 +241,9 @@ export function emptyHitter(): Hitter {
     AVG: 0,
     OBP: 0,
     SLG: 0,
-    OPS: 0
+    OPS: 0,
+    SB: 0,
+    CS: 0,
+    SBP: 0
   }
 }

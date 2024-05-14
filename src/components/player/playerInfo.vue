@@ -65,10 +65,25 @@
                 <el-table-column prop="SF" label="高飛犧牲打" />
                 <el-table-column prop="SH" label="犧牲觸擊" />
                 <el-table-column prop="ERRCH" label="失誤" />
-                <el-table-column prop="AVG" label="AVG" />
-                <el-table-column prop="OBP" label="上壘率" />
-                <el-table-column prop="SLG" label="長打率" />
-                <el-table-column prop="OPS" label="OPS" />
+                <el-table-column prop="SB" label="盜壘成功" />
+                <el-table-column prop="CS" label="盜壘失敗" />
+                <el-table-column
+                  prop="SBP"
+                  label="盜壘成功率"
+                  :formatter="rounding"
+                />
+                <el-table-column prop="AVG" label="AVG" :formatter="rounding" />
+                <el-table-column
+                  prop="OBP"
+                  label="上壘率"
+                  :formatter="rounding"
+                />
+                <el-table-column
+                  prop="SLG"
+                  label="長打率"
+                  :formatter="rounding"
+                />
+                <el-table-column prop="OPS" label="OPS" :formatter="rounding" />
               </el-table>
             </div>
             <div v-else>暫無選手資料</div>
@@ -85,7 +100,7 @@
 
 <script lang="ts" setup>
 import { defineProps, computed } from 'vue'
-import { Player, PlayerCareer } from '../../api/players/types'
+import { Hitter, Player, PlayerCareer } from '../../api/players/types'
 import BattleGame from '../battle/battleGame.vue'
 import { Game } from '../../api/games/types'
 import { TableColumnCtx } from 'element-plus'
@@ -129,8 +144,9 @@ const getSummary = computed(() => {
         if (values.length === 0) {
           sum[index] = 0 as unknown as PlayerCareer
         } else {
-          sum[index] = (values.reduce((a: number, b: number) => a + b) /
-            values.length) as unknown as PlayerCareer
+          sum[index] = (
+            values.reduce((a: number, b: number) => a + b) / values.length
+          ).toFixed(3) as unknown as PlayerCareer
         }
       } else {
         if (values.length === 0) {
@@ -147,4 +163,11 @@ const getSummary = computed(() => {
     return sum
   }
 })
+
+function rounding(row: Hitter, column: TableColumnCtx<Hitter>, value: number) {
+  if (!row) {
+    console.log(row, column, value)
+  }
+  return value.toFixed(3)
+}
 </script>

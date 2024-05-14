@@ -74,6 +74,7 @@ export async function getPlayerHitter(sheetId: string, player: string) {
     readWorkbookFromRemoteFile(sheetUrl, callback)
   })
   const playerInfo: Hitter[] = (await file) as Hitter[]
+  const gameLength = playerInfo.length
   const result: Hitter[] = []
   for (const key in playerInfo) {
     const item = playerInfo[key]
@@ -94,6 +95,9 @@ export async function getPlayerHitter(sheetId: string, player: string) {
     const OBP = item.OBP
     const SLG = item.SLG
     const OPS = item.OPS
+    const SB = item.SB
+    const CS = item.CS
+    const SBP = item.SBP
 
     if (!result[parseInt(season)]) {
       result[parseInt(season)] = {
@@ -113,7 +117,10 @@ export async function getPlayerHitter(sheetId: string, player: string) {
         AVG: 0,
         OBP: 0,
         SLG: 0,
-        OPS: 0
+        OPS: 0,
+        SB: 0,
+        CS: 0,
+        SBP: 0
       }
     }
 
@@ -129,10 +136,13 @@ export async function getPlayerHitter(sheetId: string, player: string) {
     result[parseInt(season)].SF += SF
     result[parseInt(season)].SH += SH
     result[parseInt(season)].ERRCH += ERRCH
-    result[parseInt(season)].AVG += AVG
-    result[parseInt(season)].OBP += OBP
-    result[parseInt(season)].SLG += SLG
-    result[parseInt(season)].OPS += OPS
+    result[parseInt(season)].AVG += AVG / gameLength
+    result[parseInt(season)].OBP += OBP / gameLength
+    result[parseInt(season)].SLG += SLG / gameLength
+    result[parseInt(season)].OPS += OPS / gameLength
+    result[parseInt(season)].SB += SB
+    result[parseInt(season)].CS += CS
+    result[parseInt(season)].SBP += SBP / gameLength
   }
 
   const careerArray = Object.entries(result).map(
@@ -154,7 +164,10 @@ export async function getPlayerHitter(sheetId: string, player: string) {
         AVG,
         OBP,
         SLG,
-        OPS
+        OPS,
+        SB,
+        CS,
+        SBP
       }
     ]) => ({
       season,
@@ -173,7 +186,10 @@ export async function getPlayerHitter(sheetId: string, player: string) {
       AVG,
       OBP,
       SLG,
-      OPS
+      OPS,
+      SB,
+      CS,
+      SBP
     })
   )
   const arr = careerArray.map((item) => ({
