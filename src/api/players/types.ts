@@ -214,6 +214,7 @@ export interface Hitter {
   SF: number
   SH: number
   ERRCH: number
+  HBP: number
   AVG: number
   OBP: number
   SLG: number
@@ -238,6 +239,7 @@ export function emptyHitter(): Hitter {
     SF: 0,
     SH: 0,
     ERRCH: 0,
+    HBP: 0,
     AVG: 0,
     OBP: 0,
     SLG: 0,

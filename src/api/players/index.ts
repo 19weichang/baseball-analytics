@@ -91,6 +91,7 @@ export async function getPlayerHitter(sheetId: string, player: string) {
     const SF = item.SF
     const SH = item.SH
     const ERRCH = item.ERRCH
+    const HBP = item.HBP
     const AVG = item.AVG
     const OBP = item.OBP
     const SLG = item.SLG
@@ -114,6 +115,7 @@ export async function getPlayerHitter(sheetId: string, player: string) {
         SF: 0,
         SH: 0,
         ERRCH: 0,
+        HBP: 0,
         AVG: 0,
         OBP: 0,
         SLG: 0,
@@ -136,6 +138,7 @@ export async function getPlayerHitter(sheetId: string, player: string) {
     result[parseInt(season)].SF += SF
     result[parseInt(season)].SH += SH
     result[parseInt(season)].ERRCH += ERRCH
+    result[parseInt(season)].HBP += HBP
     result[parseInt(season)].AVG += AVG / gameLength
     result[parseInt(season)].OBP += OBP / gameLength
     result[parseInt(season)].SLG += SLG / gameLength
@@ -161,6 +164,7 @@ export async function getPlayerHitter(sheetId: string, player: string) {
         SF,
         SH,
         ERRCH,
+        HBP,
         AVG,
         OBP,
         SLG,
@@ -183,6 +187,7 @@ export async function getPlayerHitter(sheetId: string, player: string) {
       SF,
       SH,
       ERRCH,
+      HBP,
       AVG,
       OBP,
       SLG,

@@ -56,10 +56,20 @@
             height="250"
             style="width: 100%"
             empty-text="暫無數據"
-            @row-click="handlePlayer"
           >
             <el-table-column fixed prop="number" label="No" width="50" />
-            <el-table-column prop="name" label="姓名" />
+            <el-table-column prop="name" label="姓名" width="100">
+              <template #default="{ row }">
+                <el-button
+                  class="playerNameBtn"
+                  text
+                  size="small"
+                  @click="handlePlayer(row)"
+                >
+                  {{ row.name }}
+                </el-button>
+              </template>
+            </el-table-column>
             <el-table-column prop="age" label="年齡" />
             <el-table-column prop="position" label="守備位置" />
             <el-table-column prop="gradeIndex" label="總評" />
@@ -238,5 +248,16 @@ fetchPlayerSheet()
   font-size: 20px;
   font-weight: 400;
   margin: 10px 0px;
+}
+
+.playerNameBtn {
+  padding: 0px;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+    color: #409eff;
+  }
 }
 </style>
