@@ -53,7 +53,8 @@
                 :summary-method="getSummary"
               >
                 <el-table-column fixed prop="season" label="球季" />
-                <el-table-column prop="PA" label="打席數" />
+                <el-table-column prop="PA" label="打席" />
+                <el-table-column prop="AB" label="打數" />
                 <el-table-column prop="SingleB" label="安打" />
                 <el-table-column prop="DoubleB" label="二壘安打" />
                 <el-table-column prop="TripleB" label="三壘安打" />

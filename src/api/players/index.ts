@@ -80,6 +80,7 @@ export async function getPlayerHitter(sheetId: string, player: string) {
     const item = playerInfo[key]
     const season = item.season
     const PA = item.PA
+    const AB = item.AB
     const SingleB = item.SingleB
     const DoubleB = item.DoubleB
     const TripleB = item.TripleB
@@ -104,6 +105,7 @@ export async function getPlayerHitter(sheetId: string, player: string) {
       result[parseInt(season)] = {
         season: '',
         PA: 0,
+        AB: 0,
         SingleB: 0,
         DoubleB: 0,
         TripleB: 0,
@@ -127,6 +129,7 @@ export async function getPlayerHitter(sheetId: string, player: string) {
     }
 
     result[parseInt(season)].PA += PA
+    result[parseInt(season)].AB += AB
     result[parseInt(season)].SingleB += SingleB
     result[parseInt(season)].DoubleB += DoubleB
     result[parseInt(season)].TripleB += TripleB
@@ -153,6 +156,7 @@ export async function getPlayerHitter(sheetId: string, player: string) {
       season,
       {
         PA,
+        AB,
         SingleB,
         DoubleB,
         TripleB,
@@ -176,6 +180,7 @@ export async function getPlayerHitter(sheetId: string, player: string) {
     ]) => ({
       season,
       PA,
+      AB,
       SingleB,
       DoubleB,
       TripleB,

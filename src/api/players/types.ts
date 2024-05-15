@@ -203,6 +203,7 @@ export function emptyPlayerCareer(): PlayerCareer {
 export interface Hitter {
   season: string
   PA: number
+  AB: number
   SingleB: number
   DoubleB: number
   TripleB: number
@@ -228,6 +229,7 @@ export function emptyHitter(): Hitter {
   return {
     season: '',
     PA: 0,
+    AB: 0,
     SingleB: 0,
     DoubleB: 0,
     TripleB: 0,
