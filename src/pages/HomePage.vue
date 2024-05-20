@@ -2,7 +2,8 @@
   <div class="homePageBg">
     <div class="header">
       <div class="icon">
-        <img src="/public/image/icon.jpeg" alt="Omega" class="OmegaIcon" />
+        <!-- <img src="/public/image/icon.jpeg" alt="Omega" class="OmegaIcon" /> -->
+        <div class="omega">Omega</div>
       </div>
       <div class=""></div>
     </div>
@@ -17,9 +18,21 @@
               class="rankTable"
               :data="filterPlayerHit"
               style="width: 100%"
+              :cell-style="numberOne"
             >
               <el-table-column fixed type="index" label="Top" width="50" />
-              <el-table-column prop="name" label="姓名" />
+              <el-table-column prop="name" label="姓名">
+                <template #default="{ row }">
+                  <el-button
+                    class="playerNameBtn"
+                    text
+                    size="small"
+                    @click="handlePlayer(row)"
+                  >
+                    {{ row.name }}
+                  </el-button>
+                </template>
+              </el-table-column>
               <el-table-column prop="hit" label="安打" />
             </el-table>
           </el-card>
@@ -35,7 +48,18 @@
               style="width: 100%"
             >
               <el-table-column fixed type="index" label="Top" width="50" />
-              <el-table-column prop="name" label="姓名" />
+              <el-table-column prop="name" label="姓名">
+                <template #default="{ row }">
+                  <el-button
+                    class="playerNameBtn"
+                    text
+                    size="small"
+                    @click="handlePlayer(row)"
+                  >
+                    {{ row.name }}
+                  </el-button>
+                </template>
+              </el-table-column>
               <el-table-column prop="rbi" label="打點" />
             </el-table>
           </el-card>
@@ -51,7 +75,18 @@
               style="width: 100%"
             >
               <el-table-column fixed type="index" label="Top" width="50" />
-              <el-table-column prop="name" label="姓名" />
+              <el-table-column prop="name" label="姓名">
+                <template #default="{ row }">
+                  <el-button
+                    class="playerNameBtn"
+                    text
+                    size="small"
+                    @click="handlePlayer(row)"
+                  >
+                    {{ row.name }}
+                  </el-button>
+                </template>
+              </el-table-column>
               <el-table-column prop="hr" label="全壘打" />
             </el-table>
           </el-card>
@@ -241,13 +276,26 @@ function closePlayerInfo() {
   playerCareer.value = undefined
 }
 
+function numberOne({ rowIndex }: { rowIndex: number }) {
+  if (rowIndex === 0) {
+    return {
+      background: '#f0f9eb',
+      color: '#67c23a',
+      fontWeight: 'bold'
+    }
+  }
+}
+
 fetchPlayerSheet()
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lobster&display=swap');
+
 .homePageBg {
   height: 100%;
-  background-image: url('public/image/backgroundImage.jpg');
+  /* background-image: url('/baseball-analytics/image/backgroundImage.jpg'); */
+  background-image: url('/baseball-analytics/image/redBackground.jpg');
   background-size: cover;
 }
 
@@ -256,8 +304,32 @@ fetchPlayerSheet()
   padding: 30px;
 }
 
+.homePage .el-card {
+  background-color: #b15560;
+}
+
+.homePage .el-tabs {
+  background-color: #b15560;
+}
+
+/* tabs style */
+.el-tabs:deep .el-tabs__header {
+  background-color: #b15560 !important;
+}
+
+.el-tabs:deep .el-tabs__header .is-top {
+  background-color: #862633 !important;
+  color: grey !important;
+}
+
+.el-tabs:deep .el-tabs__header .is-active {
+  background-color: #b15560 !important;
+  color: white !important;
+}
+
 .block {
-  background-color: rgba(161, 47, 47, 0.95);
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 2px solid;
   border-radius: 20px;
   padding: 10px 20px;
 }
@@ -270,31 +342,43 @@ fetchPlayerSheet()
   box-shadow: 0px 2px 5px #e9e9e9;
 }
 
+.omega {
+  font-size: 40px;
+  padding: 0px 10px;
+  font-family: 'Lobster', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  color: white;
+}
+
 .rankTable {
   border-radius: 5px;
-  border: 2px solid #e9e9e9;
+  border: 2px solid black;
 }
 
 .homePageTable {
-  border: 2px solid #e9e9e9;
+  border: 2px solid #862633;
   border-radius: 5px;
   margin: 10px 0px;
 }
 
 .title {
-  font-size: 20px;
+  font-size: 1.2rem;
+  font-family: 'Lobster', sans-serif;
   font-weight: 400;
-  margin: 10px 0px;
+  margin: 5px 0px;
+  color: white;
 }
 
 .playerNameBtn {
   padding: 0px;
-  font-size: 14px;
+  font-size: 1.1rem;
   cursor: pointer;
+  color: black !important;
 
   &:hover {
     text-decoration: underline;
-    color: #409eff;
+    color: #862633;
   }
 }
 
@@ -308,5 +392,30 @@ fetchPlayerSheet()
 
 .OmegaIcon {
   height: 100%;
+}
+
+/* table style */
+.el-table:deep thead th {
+  background-color: #862633 !important;
+  color: white !important;
+}
+
+.el-table:deep tbody td {
+  background-color: lightgrey !important;
+  color: black !important;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.el-table:deep ::before {
+  border-bottom: #862633 !important;
+}
+
+.el-table:deep td {
+  border-bottom: 1px solid #862633 !important;
+}
+
+.el-table:deep th {
+  border-bottom: 1px solid #862633 !important;
 }
 </style>
