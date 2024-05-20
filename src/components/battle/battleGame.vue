@@ -6,6 +6,8 @@
       style="width: 100%"
       empty-text="暫無數據"
     >
+      <el-table-column prop="gameType" label="賽事" />
+      <el-table-column prop="group" label="組別" />
       <el-table-column fixed prop="team" label="隊伍" />
       <el-table-column prop="PA" label="打席" />
       <el-table-column prop="SingleB" label="安打" />
