@@ -190,12 +190,14 @@ export function emptyPlayer(): Player {
 
 export interface PlayerCareer {
   name: string
+  number: number
   hitter: Hitter
 }
 
 export function emptyPlayerCareer(): PlayerCareer {
   return {
     name: '',
+    number: 0,
     hitter: emptyHitter()
   }
 }

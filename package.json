@@ -13,12 +13,14 @@
     "deploy": "vite build && gh-pages -d dist"
   },
   "dependencies": {
+    "@vueuse/router": "^10.9.0",
     "element-plus": "^2.7.0",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
+    "@types/node": "^20.12.12",
     "@typescript-eslint/eslint-plugin": "^7.7.0",
     "@typescript-eslint/parser": "^7.7.0",
     "@vitejs/plugin-vue": "^5.0.4",

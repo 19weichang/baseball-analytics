@@ -134,34 +134,20 @@
       </div>
     </div>
   </div>
-  <PlayerInfo
-    :isVisible="isVisible"
-    :player="player"
-    :playerCareer="playerCareer"
-    :infoLoading="infoLoading"
-    :games="games"
-    @close="closePlayerInfo"
-  />
 </template>
 
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
 import { getPlayers, getPlayerHitter } from '../api/players/index'
 import { Player, PlayerCareer, Hitter } from '../api/players/types'
-import PlayerInfo from '../components/player/playerInfo.vue'
-import { getGame } from '../api/games/index'
-import { Game } from '../api/games/types'
+import { useRouter } from 'vue-router'
 
 const players = ref<Player[]>([])
 const playerLength = ref<number>(0)
 const loading = ref<boolean>(false)
-const infoLoading = ref<boolean>(false)
 const sheetId = import.meta.env.VITE_GOOGLE_SHEET_DOC_ID
-const isVisible = ref(false)
 const playersCareer = ref<PlayerCareer[]>([])
-const playerCareer = ref<PlayerCareer>()
-const games = ref<Game[]>([])
-const player = ref<Player>()
+const router = useRouter()
 
 const filterPlayerHit = computed(() => {
   if (playersCareer.value.length !== playerLength.value) return []
@@ -175,7 +161,8 @@ const filterPlayerHit = computed(() => {
                 acc + cur.SingleB + cur.DoubleB + cur.TripleB + cur.HR,
               0
             )
-          : 0
+          : 0,
+        number: player.number
       }
     })
     .sort((a, b) => b.hit - a.hit)
@@ -193,7 +180,8 @@ const filterPlayerRBI = computed(() => {
         name: player.name,
         rbi: Array.isArray(player.hitter)
           ? player.hitter.reduce((acc: number, cur: Hitter) => acc + cur.RBI, 0)
-          : 0
+          : 0,
+        number: player.number
       }
     })
     .sort((a, b) => b.rbi - a.rbi)
@@ -211,7 +199,8 @@ const filterPlayerHR = computed(() => {
         name: player.name,
         hr: Array.isArray(player.hitter)
           ? player.hitter.reduce((acc: number, cur: Hitter) => acc + cur.HR, 0)
-          : 0
+          : 0,
+        number: player.number
       }
     })
     .sort((a, b) => b.hr - a.hr)
@@ -251,29 +240,12 @@ function fetchPlayersCareer(players: Player[]) {
 }
 
 function handlePlayer(row: Player) {
-  isVisible.value = true
-  infoLoading.value = true
-  const sheetName = `${row.name}${row.number}`
-  const CareerList = playersCareer.value
-  playerCareer.value =
-    CareerList[CareerList.map((item) => item.name).indexOf(row.name)]
-  if (playerCareer.value) {
-    getGame(sheetId, sheetName)
-      .then((gameSheet) => {
-        games.value = gameSheet
-        player.value = row
-        infoLoading.value = false
-      })
-      .catch((err) => {
-        console.log(err)
-        infoLoading.value = false
-      })
+  if (row.name) {
+    router.push({
+      name: 'PlayerInfoPage',
+      query: { player: JSON.stringify(row) }
+    })
   }
-}
-
-function closePlayerInfo() {
-  isVisible.value = false
-  playerCareer.value = undefined
 }
 
 function numberOne({ rowIndex }: { rowIndex: number }) {
