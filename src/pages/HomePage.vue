@@ -292,23 +292,6 @@ fetchPlayerSheet()
   padding: 10px 20px;
 }
 
-/* .header {
-  height: 60px;
-  background-color: #862633;
-  color: white;
-  font-size: 40px;
-  box-shadow: 0px 2px 5px #e9e9e9;
-} */
-
-/* .omega {
-  font-size: 40px;
-  padding: 0px 10px;
-  font-family: 'Lobster', sans-serif;
-  font-weight: 400;
-  font-style: normal;
-  color: white;
-} */
-
 .rankTable {
   border-radius: 5px;
   border: 2px solid black;
@@ -343,10 +326,6 @@ fetchPlayerSheet()
 .tabsCard {
   margin: 10px 0px;
 }
-
-/* .icon {
-  height: 100%;
-} */
 
 .OmegaIcon {
   height: 100%;

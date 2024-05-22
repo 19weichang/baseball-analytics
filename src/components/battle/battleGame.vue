@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="battleGame">
     <el-table
       :data="props.games"
       height="250"
@@ -50,3 +50,36 @@ function changeWord(row: Hitter) {
   }
 }
 </script>
+
+<style scoped>
+.el-table {
+  border-radius: 5px;
+  border: 2px solid black;
+  background-color: lightgrey;
+}
+
+/* table style */
+.el-table:deep thead th {
+  background-color: #862633 !important;
+  color: white !important;
+}
+
+.el-table:deep tbody td {
+  background-color: lightgrey !important;
+  color: black !important;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.el-table:deep ::before {
+  border-bottom: #862633 !important;
+}
+
+.el-table:deep td {
+  border-bottom: 1px solid #862633 !important;
+}
+
+.el-table:deep th {
+  border-bottom: 1px solid #862633 !important;
+}
+</style>
