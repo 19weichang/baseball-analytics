@@ -1,27 +1,105 @@
 <template>
-  <div class="homePageBg">
-    <div class="header">
-      <div class="icon">
-        <!-- <img src="/public/image/icon.jpeg" alt="Omega" class="OmegaIcon" /> -->
-        <div class="omega">Omega</div>
-      </div>
-      <div class=""></div>
-    </div>
-    <div class="homePage">
-      <el-row class="block">
-        <!-- 安打 -->
-        <el-col :xs="24" :sm="8" style="padding: 10px">
-          <el-card>
-            <p class="title">安打 Top5</p>
+  <div class="homePage">
+    <el-row class="block">
+      <!-- 安打 -->
+      <el-col :xs="24" :sm="8" style="padding: 10px">
+        <el-card>
+          <p class="title">安打 Top5</p>
+          <el-table
+            v-loading="rankHitLoading || loading"
+            class="rankTable"
+            :data="filterPlayerHit"
+            style="width: 100%"
+            :cell-style="numberOne"
+          >
+            <el-table-column fixed type="index" label="Top" width="50" />
+            <el-table-column prop="name" label="姓名">
+              <template #default="{ row }">
+                <el-button
+                  class="playerNameBtn"
+                  text
+                  size="small"
+                  @click="handlePlayer(row)"
+                >
+                  {{ row.name }}
+                </el-button>
+              </template>
+            </el-table-column>
+            <el-table-column prop="hit" label="安打" />
+          </el-table>
+        </el-card>
+      </el-col>
+      <!-- 打點 -->
+      <el-col :xs="24" :sm="8" style="padding: 10px">
+        <el-card>
+          <p class="title">打點 Top5</p>
+          <el-table
+            v-loading="rankRBILoading || loading"
+            class="rankTable"
+            :data="filterPlayerRBI"
+            style="width: 100%"
+          >
+            <el-table-column fixed type="index" label="Top" width="50" />
+            <el-table-column prop="name" label="姓名">
+              <template #default="{ row }">
+                <el-button
+                  class="playerNameBtn"
+                  text
+                  size="small"
+                  @click="handlePlayer(row)"
+                >
+                  {{ row.name }}
+                </el-button>
+              </template>
+            </el-table-column>
+            <el-table-column prop="rbi" label="打點" />
+          </el-table>
+        </el-card>
+      </el-col>
+      <!-- 全壘打 -->
+      <el-col :xs="24" :sm="8" style="padding: 10px">
+        <el-card>
+          <p class="title">全壘打 Top5</p>
+          <el-table
+            v-loading="rankHRLoading || loading"
+            class="rankTable"
+            :data="filterPlayerHR"
+            style="width: 100%"
+          >
+            <el-table-column fixed type="index" label="Top" width="50" />
+            <el-table-column prop="name" label="姓名">
+              <template #default="{ row }">
+                <el-button
+                  class="playerNameBtn"
+                  text
+                  size="small"
+                  @click="handlePlayer(row)"
+                >
+                  {{ row.name }}
+                </el-button>
+              </template>
+            </el-table-column>
+            <el-table-column prop="hr" label="全壘打" />
+          </el-table>
+        </el-card>
+      </el-col>
+    </el-row>
+    <el-divider />
+    <div class="block">
+      <el-tabs type="border-card" class="tabsCard">
+        <el-tab-pane label="打者">
+          <el-row>
             <el-table
-              v-loading="rankHitLoading || loading"
-              class="rankTable"
-              :data="filterPlayerHit"
+              class="homePageTable"
+              stripe
+              v-loading="loading"
+              :data="players"
+              height="250"
               style="width: 100%"
-              :cell-style="numberOne"
+              empty-text="暫無數據"
             >
-              <el-table-column fixed type="index" label="Top" width="50" />
-              <el-table-column prop="name" label="姓名">
+              <el-table-column fixed prop="number" label="No" width="50" />
+              <el-table-column prop="name" label="姓名" width="100">
                 <template #default="{ row }">
                   <el-button
                     class="playerNameBtn"
@@ -33,105 +111,18 @@
                   </el-button>
                 </template>
               </el-table-column>
-              <el-table-column prop="hit" label="安打" />
+              <el-table-column prop="age" label="年齡" />
+              <el-table-column prop="position" label="守備位置" />
+              <el-table-column prop="gradeIndex" label="總評" />
+              <el-table-column prop="hit" label="打擊" />
+              <el-table-column prop="speed" label="速度" />
+              <el-table-column prop="defense" label="守備" />
+              <el-table-column prop="arm" label="傳球" />
             </el-table>
-          </el-card>
-        </el-col>
-        <!-- 打點 -->
-        <el-col :xs="24" :sm="8" style="padding: 10px">
-          <el-card>
-            <p class="title">打點 Top5</p>
-            <el-table
-              v-loading="rankRBILoading || loading"
-              class="rankTable"
-              :data="filterPlayerRBI"
-              style="width: 100%"
-            >
-              <el-table-column fixed type="index" label="Top" width="50" />
-              <el-table-column prop="name" label="姓名">
-                <template #default="{ row }">
-                  <el-button
-                    class="playerNameBtn"
-                    text
-                    size="small"
-                    @click="handlePlayer(row)"
-                  >
-                    {{ row.name }}
-                  </el-button>
-                </template>
-              </el-table-column>
-              <el-table-column prop="rbi" label="打點" />
-            </el-table>
-          </el-card>
-        </el-col>
-        <!-- 全壘打 -->
-        <el-col :xs="24" :sm="8" style="padding: 10px">
-          <el-card>
-            <p class="title">全壘打 Top5</p>
-            <el-table
-              v-loading="rankHRLoading || loading"
-              class="rankTable"
-              :data="filterPlayerHR"
-              style="width: 100%"
-            >
-              <el-table-column fixed type="index" label="Top" width="50" />
-              <el-table-column prop="name" label="姓名">
-                <template #default="{ row }">
-                  <el-button
-                    class="playerNameBtn"
-                    text
-                    size="small"
-                    @click="handlePlayer(row)"
-                  >
-                    {{ row.name }}
-                  </el-button>
-                </template>
-              </el-table-column>
-              <el-table-column prop="hr" label="全壘打" />
-            </el-table>
-          </el-card>
-        </el-col>
-      </el-row>
-      <el-divider />
-      <div class="block">
-        <el-tabs type="border-card" class="tabsCard">
-          <el-tab-pane label="打者">
-            <el-row>
-              <el-table
-                class="homePageTable"
-                stripe
-                v-loading="loading"
-                :data="players"
-                height="250"
-                style="width: 100%"
-                empty-text="暫無數據"
-              >
-                <el-table-column fixed prop="number" label="No" width="50" />
-                <el-table-column prop="name" label="姓名" width="100">
-                  <template #default="{ row }">
-                    <el-button
-                      class="playerNameBtn"
-                      text
-                      size="small"
-                      @click="handlePlayer(row)"
-                    >
-                      {{ row.name }}
-                    </el-button>
-                  </template>
-                </el-table-column>
-                <el-table-column prop="age" label="年齡" />
-                <el-table-column prop="position" label="守備位置" />
-                <el-table-column prop="gradeIndex" label="總評" />
-                <el-table-column prop="hit" label="打擊" />
-                <el-table-column prop="speed" label="速度" />
-                <el-table-column prop="defense" label="守備" />
-                <el-table-column prop="arm" label="傳球" />
-              </el-table>
-            </el-row>
-          </el-tab-pane>
-          <el-tab-pane label="投手">coming soon...</el-tab-pane>
-        </el-tabs>
-      </div>
+          </el-row>
+        </el-tab-pane>
+        <el-tab-pane label="投手">coming soon...</el-tab-pane>
+      </el-tabs>
     </div>
   </div>
 </template>
@@ -264,15 +255,11 @@ fetchPlayerSheet()
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lobster&display=swap');
 
-.homePageBg {
+.homePage {
   height: 100%;
   /* background-image: url('/baseball-analytics/image/backgroundImage.jpg'); */
   background-image: url('/baseball-analytics/image/redBackground.jpg');
   background-size: cover;
-}
-
-.homePage {
-  height: 100%;
   padding: 30px;
 }
 
@@ -306,22 +293,22 @@ fetchPlayerSheet()
   padding: 10px 20px;
 }
 
-.header {
+/* .header {
   height: 60px;
   background-color: #862633;
   color: white;
   font-size: 40px;
   box-shadow: 0px 2px 5px #e9e9e9;
-}
+} */
 
-.omega {
+/* .omega {
   font-size: 40px;
   padding: 0px 10px;
   font-family: 'Lobster', sans-serif;
   font-weight: 400;
   font-style: normal;
   color: white;
-}
+} */
 
 .rankTable {
   border-radius: 5px;
@@ -358,9 +345,9 @@ fetchPlayerSheet()
   margin: 10px 0px;
 }
 
-.icon {
+/* .icon {
   height: 100%;
-}
+} */
 
 .OmegaIcon {
   height: 100%;
