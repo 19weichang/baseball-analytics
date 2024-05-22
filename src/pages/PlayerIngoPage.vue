@@ -1,5 +1,5 @@
 <template>
-  <el-card>
+  <el-card v-loading="loading">
     <el-row>
       <el-col :span="6">
         <el-avatar
@@ -83,35 +83,58 @@
 
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
-import { Hitter, Player } from '@/api/players/types'
+import { Hitter, Player, PlayerCareer } from '@/api/players/types'
 import BattleGame from '@/components/battle/battleGame.vue'
 import { TableColumnCtx } from 'element-plus'
 import { useRouteQuery } from '@vueuse/router'
 import { getGame } from '@/api/games/index'
 import { Game } from '@/api/games/types'
+import { getPlayer, getPlayerHitter } from '@/api/players/index'
 
-const playerRouteQuery = useRouteQuery('player')
+const playerName = useRouteQuery('name')
+const playerNumber = useRouteQuery('number')
 const sheetId = import.meta.env.VITE_GOOGLE_SHEET_DOC_ID
 const games = ref<Game[]>([])
 const player = ref<Player | undefined>()
+const playersCareer = ref<PlayerCareer[]>([])
+const loading = ref<boolean>(false)
 
-if (typeof playerRouteQuery.value === 'string') {
-  fetchPlayerInfo(playerRouteQuery.value)
+if (playerNumber.value || playerName.value) {
+  loading.value = true
+  const number = Number(playerNumber.value)
+  const name = playerName.value?.toString() as string
+  fetchPlayer(name, number)
 }
 
-function fetchPlayerInfo(playerRouteQuery: string) {
-  const playerInfo = JSON.parse(playerRouteQuery)
-  const { name, number } = playerInfo
-  const sheetName = `${name}${number}`
-  player.value = playerInfo
-  getGame(sheetId, sheetName)
+async function fetchPlayer(playerName: string, playerNumber: number) {
+  const sheetName = `${playerName}${playerNumber}`
+
+  await getPlayer(sheetId, playerNumber)
+    .then((playerInfo) => {
+      player.value = playerInfo
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  await getGame(sheetId, sheetName)
     .then((gameSheet) => {
-      console.log(gameSheet)
       games.value = gameSheet
     })
     .catch((err) => {
       console.log(err)
     })
+
+  await getPlayerHitter(sheetId, sheetName)
+    .then((data) => {
+      if (player.value) {
+        playersCareer.value.push(Object.assign(player.value, { hitter: data }))
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+
+  loading.value = false
 }
 
 const emptyImage =

@@ -234,7 +234,7 @@ function handlePlayer(row: Player) {
   if (row.name) {
     router.push({
       name: 'PlayerInfoPage',
-      query: { player: JSON.stringify(row) }
+      query: { name: row.name, number: row.number }
     })
   }
 }

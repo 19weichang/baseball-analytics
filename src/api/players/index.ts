@@ -49,18 +49,21 @@ export function isVaildKey(
   return key in object
 }
 
-export async function getplayer(sheetId: string, player: string) {
+export async function getPlayer(sheetId: string, playerNumber: number) {
   const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=xlsx`
   const file = new Promise((resolve) => {
     const callback = (workbook: xlsx.WorkBook) => {
-      const sheet = workbook.Sheets[player]
+      const sheet = workbook.Sheets['players']
       const json = utils.sheet_to_json(sheet)
       resolve(json)
     }
     readWorkbookFromRemoteFile(sheetUrl, callback)
   })
-  const playerInfo: Player[] = (await file) as Player[]
-  return playerInfo[0]
+  const players: Player[] = (await file) as Player[]
+  const playersArr = transformEnglish(players) as Player[]
+  const playerIndex = playersArr.map((n) => n.number).indexOf(playerNumber)
+  const player = playersArr[playerIndex]
+  return player
 }
 
 export async function getPlayerHitter(sheetId: string, player: string) {
