@@ -5,8 +5,9 @@ import { Player, PlayerEnglish, Hitter } from './types'
 import { utils } from 'xlsx'
 
 const key = import.meta.env.VITE_GOOGLE_API_KEY
+const sheetId = import.meta.env.VITE_GOOGLE_SHEET_DOC_ID
 
-export async function getPlayers(sheetId: string) {
+export async function getPlayers() {
   if (!key) {
     throw new Error('Google API Key is not defined')
   }
@@ -49,7 +50,7 @@ export function isVaildKey(
   return key in object
 }
 
-export async function getPlayer(sheetId: string, playerNumber: number) {
+export async function getPlayer(playerNumber: number) {
   const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=xlsx`
   const file = new Promise((resolve) => {
     const callback = (workbook: xlsx.WorkBook) => {
@@ -66,7 +67,7 @@ export async function getPlayer(sheetId: string, playerNumber: number) {
   return player
 }
 
-export async function getPlayerHitter(sheetId: string, player: string) {
+export async function getPlayerHitter(player: string) {
   const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=xlsx`
   const file = new Promise((resolve) => {
     const callback = (workbook: xlsx.WorkBook) => {

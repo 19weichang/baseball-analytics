@@ -3,7 +3,9 @@ import { readWorkbookFromRemoteFile } from '../../utils/xlsx'
 import { utils } from 'xlsx'
 import { Game } from './types'
 
-export async function getGame(sheetId: string, player: string) {
+const sheetId = import.meta.env.VITE_GOOGLE_SHEET_DOC_ID
+
+export async function getGame(player: string) {
   const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=xlsx`
   const file = new Promise((resolve) => {
     const callback = (workbook: xlsx.WorkBook) => {

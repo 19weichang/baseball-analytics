@@ -93,7 +93,6 @@ import { getPlayer, getPlayerHitter } from '@/api/players/index'
 
 const playerName = useRouteQuery('name')
 const playerNumber = useRouteQuery('number')
-const sheetId = import.meta.env.VITE_GOOGLE_SHEET_DOC_ID
 const games = ref<Game[]>([])
 const player = ref<Player | undefined>()
 const playersCareer = ref<PlayerCareer[]>([])
@@ -109,14 +108,14 @@ if (playerNumber.value || playerName.value) {
 async function fetchPlayer(playerName: string, playerNumber: number) {
   const sheetName = `${playerName}${playerNumber}`
 
-  await getPlayer(sheetId, playerNumber)
+  await getPlayer(playerNumber)
     .then((playerInfo) => {
       player.value = playerInfo
     })
     .catch((err) => {
       console.log(err)
     })
-  await getGame(sheetId, sheetName)
+  await getGame(sheetName)
     .then((gameSheet) => {
       games.value = gameSheet
     })
@@ -124,7 +123,7 @@ async function fetchPlayer(playerName: string, playerNumber: number) {
       console.log(err)
     })
 
-  await getPlayerHitter(sheetId, sheetName)
+  await getPlayerHitter(sheetName)
     .then((data) => {
       if (player.value) {
         playersCareer.value.push(Object.assign(player.value, { hitter: data }))

@@ -136,7 +136,6 @@ import { useRouter } from 'vue-router'
 const players = ref<Player[]>([])
 const playerLength = ref<number>(0)
 const loading = ref<boolean>(false)
-const sheetId = import.meta.env.VITE_GOOGLE_SHEET_DOC_ID
 const playersCareer = ref<PlayerCareer[]>([])
 const router = useRouter()
 
@@ -204,7 +203,7 @@ const rankHRLoading = computed(() => {
 
 function fetchPlayerSheet() {
   loading.value = true
-  getPlayers(sheetId)
+  getPlayers()
     .then((data) => {
       players.value = data
       playerLength.value = data.length
@@ -220,7 +219,7 @@ function fetchPlayerSheet() {
 
 function fetchPlayersCareer(players: Player[]) {
   players.forEach((player) => {
-    getPlayerHitter(sheetId, `${player.name}${player.number}`)
+    getPlayerHitter(`${player.name}${player.number}`)
       .then((data) => {
         playersCareer.value.push(Object.assign(player, { hitter: data }))
       })
