@@ -14,7 +14,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/baseball-analytics/playerInfo',
     name: 'PlayerInfoPage',
-    component: () => import('@/pages/PlayerIngoPage.vue'),
+    component: () => import('@/pages/PlayerInfoPage.vue'),
     meta: { title: '球員資訊' }
   },
   {
