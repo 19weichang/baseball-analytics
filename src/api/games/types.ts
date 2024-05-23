@@ -1,5 +1,5 @@
 export interface Game {
-  season: number
+  season: string
   gameType: string
   group: string
   team: string
@@ -29,7 +29,7 @@ export interface Game {
 
 export function emptyGame(): Game {
   return {
-    season: 0,
+    season: '',
     gameType: '',
     group: '',
     team: '',

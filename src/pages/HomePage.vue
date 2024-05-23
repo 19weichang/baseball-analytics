@@ -3,7 +3,7 @@
     <el-row class="block">
       <!-- 安打 -->
       <el-col :xs="24" :sm="8" style="padding: 10px">
-        <el-card>
+        <el-card class="rankCard">
           <p class="title">安打 Top5</p>
           <el-table
             v-loading="rankHitLoading || loading"
@@ -31,7 +31,7 @@
       </el-col>
       <!-- 打點 -->
       <el-col :xs="24" :sm="8" style="padding: 10px">
-        <el-card>
+        <el-card class="rankCard">
           <p class="title">打點 Top5</p>
           <el-table
             v-loading="rankRBILoading || loading"
@@ -58,7 +58,7 @@
       </el-col>
       <!-- 全壘打 -->
       <el-col :xs="24" :sm="8" style="padding: 10px">
-        <el-card>
+        <el-card class="rankCard">
           <p class="title">全壘打 Top5</p>
           <el-table
             v-loading="rankHRLoading || loading"
@@ -124,6 +124,12 @@
         <el-tab-pane label="投手">coming soon...</el-tab-pane>
       </el-tabs>
     </div>
+    <StatisticalData
+      :totalHits="totalHits"
+      :totalRbis="totalRbis"
+      :totalHrs="totalHrs"
+      :thisYearLeagueGame="thisYearLeagueGame"
+    />
   </div>
 </template>
 
@@ -132,16 +138,25 @@ import { ref, computed } from 'vue'
 import { getPlayers, getPlayerHitter } from '../api/players/index'
 import { Player, PlayerCareer, Hitter } from '../api/players/types'
 import { useRouter } from 'vue-router'
+import { getGameByType } from '@/api/games/index'
+import StatisticalData from '@/components/statistical/statisticalData.vue'
+import { Game } from '@/api/games/types'
 
 const players = ref<Player[]>([])
 const playerLength = ref<number>(0)
 const loading = ref<boolean>(false)
 const playersCareer = ref<PlayerCareer[]>([])
 const router = useRouter()
+const totalHits = ref<number>(0)
+const totalRbis = ref<number>(0)
+const totalHrs = ref<number>(0)
+const thisYearLeagueGame = ref<Game[]>([])
+const nowYear = new Date().getFullYear().toString()
+const playersLeagueCareer = ref<PlayerCareer[]>([])
 
 const filterPlayerHit = computed(() => {
   if (playersCareer.value.length !== playerLength.value) return []
-  return playersCareer.value
+  const hit = playersCareer.value
     .map((player) => {
       return {
         name: player.name,
@@ -156,15 +171,20 @@ const filterPlayerHit = computed(() => {
       }
     })
     .sort((a, b) => b.hit - a.hit)
-    .slice(0, 5)
+  totolHit(hit)
+  return hit.slice(0, 5)
 })
+
+function totolHit(hit: { name: string; hit: number; number: number }[]) {
+  totalHits.value = hit.reduce((acc, cur) => acc + cur.hit, 0)
+}
 
 const rankHitLoading = computed(() => {
   return playersCareer.value.length == playerLength.value ? false : true
 })
 
 const filterPlayerRBI = computed(() => {
-  return playersCareer.value
+  const rbi = playersCareer.value
     .map((player) => {
       return {
         name: player.name,
@@ -175,15 +195,20 @@ const filterPlayerRBI = computed(() => {
       }
     })
     .sort((a, b) => b.rbi - a.rbi)
-    .slice(0, 5)
+  totalRbi(rbi)
+  return rbi.slice(0, 5)
 })
+
+function totalRbi(rbi: { name: string; rbi: number; number: number }[]) {
+  totalRbis.value = rbi.reduce((acc, cur) => acc + cur.rbi, 0)
+}
 
 const rankRBILoading = computed(() => {
   return playersCareer.value.length == playerLength.value ? false : true
 })
 
 const filterPlayerHR = computed(() => {
-  return playersCareer.value
+  const hr = playersCareer.value
     .map((player) => {
       return {
         name: player.name,
@@ -194,8 +219,13 @@ const filterPlayerHR = computed(() => {
       }
     })
     .sort((a, b) => b.hr - a.hr)
-    .slice(0, 5)
+  totalHr(hr)
+  return hr.slice(0, 5)
 })
+
+function totalHr(hr: { name: string; hr: number; number: number }[]) {
+  totalHrs.value = hr.reduce((acc, cur) => acc + cur.hr, 0)
+}
 
 const rankHRLoading = computed(() => {
   return playersCareer.value.length == playerLength.value ? false : true
@@ -217,16 +247,31 @@ function fetchPlayerSheet() {
     })
 }
 
-function fetchPlayersCareer(players: Player[]) {
+async function fetchPlayersCareer(players: Player[]) {
   players.forEach((player) => {
-    getPlayerHitter(`${player.name}${player.number}`)
+    const sheetName = `${player.name}${player.number}`
+    getPlayerHitter(sheetName)
       .then((data) => {
         playersCareer.value.push(Object.assign(player, { hitter: data }))
       })
       .catch((err) => {
         console.log(err)
       })
+    getGameByType(sheetName, '季賽')
+      .then((data) => {
+        playersLeagueCareer.value.push(Object.assign(player, { hitter: data }))
+        thisYearLeagueSeason(data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   })
+}
+
+function thisYearLeagueSeason(data: Game[]) {
+  thisYearLeagueGame.value.push(
+    ...data.filter((n) => n.season === nowYear).map((hitter) => hitter)
+  )
 }
 
 function handlePlayer(row: Player) {
@@ -251,7 +296,7 @@ function numberOne({ rowIndex }: { rowIndex: number }) {
 fetchPlayerSheet()
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lobster&display=swap');
 
 .homePage {
@@ -260,99 +305,96 @@ fetchPlayerSheet()
   background-image: url('/baseball-analytics/image/redBackground.jpg');
   background-size: cover;
   padding: 30px;
-}
 
-.homePage .el-card {
-  background-color: #b15560;
-}
-
-.homePage .el-tabs {
-  background-color: #b15560;
-}
-
-/* tabs style */
-.el-tabs:deep .el-tabs__header {
-  background-color: #b15560 !important;
-}
-
-.el-tabs:deep .el-tabs__header .is-top {
-  background-color: #862633 !important;
-  color: grey !important;
-}
-
-.el-tabs:deep .el-tabs__header .is-active {
-  background-color: #b15560 !important;
-  color: white !important;
-}
-
-.block {
-  background-color: rgba(0, 0, 0, 0.3);
-  border: 2px solid;
-  border-radius: 20px;
-  padding: 10px 20px;
-}
-
-.rankTable {
-  border-radius: 5px;
-  border: 2px solid black;
-}
-
-.homePageTable {
-  border: 2px solid #862633;
-  border-radius: 5px;
-  margin: 10px 0px;
-}
-
-.title {
-  font-size: 1.2rem;
-  font-family: 'Lobster', sans-serif;
-  font-weight: 400;
-  margin: 5px 0px;
-  color: white;
-}
-
-.playerNameBtn {
-  padding: 0px;
-  font-size: 1.1rem;
-  cursor: pointer;
-  color: black !important;
-
-  &:hover {
-    text-decoration: underline;
-    color: #862633;
+  .rankCard {
+    background-color: #b15560;
   }
-}
+  /* tabs style */
 
-.tabsCard {
-  margin: 10px 0px;
-}
+  .tabsCard {
+    margin: 10px 0px;
+    background-color: #b15560;
+  }
 
-.OmegaIcon {
-  height: 100%;
-}
+  .tabsCard:deep .el-tabs__header {
+    background-color: #b15560 !important;
+  }
 
-/* table style */
-.el-table:deep thead th {
-  background-color: #862633 !important;
-  color: white !important;
-}
+  .tabsCard:deep .el-tabs__header .is-top {
+    background-color: #862633 !important;
+    color: grey !important;
+  }
 
-.el-table:deep tbody td {
-  background-color: lightgrey !important;
-  color: black !important;
-  font-size: 1.1rem;
-  font-weight: 500;
-}
+  .tabsCard:deep .el-tabs__header .is-active {
+    background-color: #b15560 !important;
+    color: white !important;
+  }
 
-.el-table:deep ::before {
-  border-bottom: #862633 !important;
-}
+  .block {
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 2px solid;
+    border-radius: 20px;
+    padding: 10px 20px;
+  }
 
-.el-table:deep td {
-  border-bottom: 1px solid #862633 !important;
-}
+  .rankTable {
+    border-radius: 5px;
+    border: 2px solid black;
+  }
 
-.el-table:deep th {
-  border-bottom: 1px solid #862633 !important;
+  .homePageTable {
+    border: 2px solid #862633;
+    border-radius: 5px;
+    margin: 10px 0px;
+  }
+
+  .title {
+    font-size: 1.2rem;
+    font-family: 'Lobster', sans-serif;
+    font-weight: 400;
+    margin: 5px 0px;
+    color: white;
+  }
+
+  .playerNameBtn {
+    padding: 0px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: black !important;
+
+    &:hover {
+      text-decoration: underline;
+      color: #862633;
+    }
+  }
+
+  .OmegaIcon {
+    height: 100%;
+  }
+
+  /* table style */
+  .el-table:deep thead th {
+    background-color: #862633 !important;
+    color: white !important;
+  }
+
+  .el-table:deep tbody td {
+    background-color: lightgrey !important;
+    color: black !important;
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+
+  .el-table:deep ::before {
+    border-bottom: #862633 !important;
+  }
+
+  .el-table:deep td {
+    border-bottom: 1px solid #862633 !important;
+  }
+
+  .el-table:deep th {
+    border-bottom: 1px solid #862633 !important;
+  }
 }
 </style>
