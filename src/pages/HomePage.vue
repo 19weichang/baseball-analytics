@@ -40,115 +40,12 @@
       </el-tabs>
     </div>
     <div class="block">
-      <el-collapse v-model="activeNames">
-        <el-collapse-item title="安打 Top5" name="1">
-          <el-card class="rankCard">
-            <el-row>
-              <el-col :md="6">
-                <el-card
-                  v-loading="rankHitLoading || loading"
-                  class="playerCard"
-                >
-                  <div class="playerCardBox">
-                    <img
-                      class="playerCardImg"
-                      :src="
-                        filterPlayerHit[0]?.image
-                          ? filterPlayerHit[0]?.image
-                          : 'public/image/emptyPlayer.png'
-                      "
-                    />
-                    <div class="playerCardText">
-                      <div class="playerCardTitle">
-                        {{
-                          `${filterPlayerHit[0]?.name} / ${filterPlayerHit[0]?.number}`
-                        }}
-                      </div>
-                      <div class="playerCardInfo">
-                        {{ `目前安打數: ${filterPlayerHit[0]?.hit}` }}
-                      </div>
-                    </div>
-                  </div>
-                </el-card>
-              </el-col>
-              <el-col :md="18">
-                <el-table
-                  v-loading="rankHitLoading || loading"
-                  class="rankTable"
-                  :data="filterPlayerHit"
-                  style="width: 100%"
-                  :cell-style="numberOne"
-                >
-                  <el-table-column fixed type="index" label="Top" width="50" />
-                  <el-table-column prop="name" label="姓名">
-                    <template #default="{ row }">
-                      <el-button
-                        class="playerNameBtn"
-                        text
-                        size="small"
-                        @click="handlePlayer(row)"
-                      >
-                        {{ row.name }}
-                      </el-button>
-                    </template>
-                  </el-table-column>
-                  <el-table-column prop="hit" label="安打" />
-                </el-table>
-              </el-col>
-            </el-row>
-          </el-card>
-        </el-collapse-item>
-        <el-collapse-item title="打點 Top5" name="2">
-          <el-card class="rankCard">
-            <el-table
-              v-loading="rankRBILoading || loading"
-              class="rankTable"
-              :data="filterPlayerRBI"
-              style="width: 100%"
-            >
-              <el-table-column fixed type="index" label="Top" width="50" />
-              <el-table-column prop="name" label="姓名">
-                <template #default="{ row }">
-                  <el-button
-                    class="playerNameBtn"
-                    text
-                    size="small"
-                    @click="handlePlayer(row)"
-                  >
-                    {{ row.name }}
-                  </el-button>
-                </template>
-              </el-table-column>
-              <el-table-column prop="rbi" label="打點" />
-            </el-table>
-          </el-card>
-        </el-collapse-item>
-        <el-collapse-item title="全壘打 Top5" name="3">
-          <el-card class="rankCard">
-            <el-table
-              v-loading="rankHRLoading || loading"
-              class="rankTable"
-              :data="filterPlayerHR"
-              style="width: 100%"
-            >
-              <el-table-column fixed type="index" label="Top" width="50" />
-              <el-table-column prop="name" label="姓名">
-                <template #default="{ row }">
-                  <el-button
-                    class="playerNameBtn"
-                    text
-                    size="small"
-                    @click="handlePlayer(row)"
-                  >
-                    {{ row.name }}
-                  </el-button>
-                </template>
-              </el-table-column>
-              <el-table-column prop="hr" label="全壘打" />
-            </el-table>
-          </el-card>
-        </el-collapse-item>
-      </el-collapse>
+      <PlayerRank
+        :loading="loading"
+        :playersLeagueCareer="playersLeagueCareer"
+        :playerLength="playerLength"
+        @handlePlayer="handlePlayer"
+      />
     </div>
     <StatisticalData
       :totalHits="totalHits"
@@ -160,12 +57,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { getPlayers, getPlayerHitter } from '../api/players/index'
-import { Player, PlayerCareer, Hitter } from '../api/players/types'
+import { Player, PlayerCareer } from '../api/players/types'
 import { useRouter } from 'vue-router'
 import { getGameByType } from '@/api/games/index'
 import StatisticalData from '@/components/statistical/statisticalData.vue'
+import PlayerRank from '@/components/rank/playerRank.vue'
 import { Game } from '@/api/games/types'
 
 const players = ref<Player[]>([])
@@ -179,87 +77,6 @@ const totalHrs = ref<number>(0)
 const thisYearLeagueGame = ref<Game[]>([])
 const nowYear = new Date().getFullYear().toString()
 const playersLeagueCareer = ref<PlayerCareer[]>([])
-const activeNames = ref(['1'])
-
-const filterPlayerHit = computed(() => {
-  if (playersLeagueCareer.value.length !== playerLength.value) return []
-  const hit = playersLeagueCareer.value
-    .map((player) => {
-      return {
-        name: player.name,
-        hit: Array.isArray(player.hitter)
-          ? player.hitter.reduce(
-              (acc: number, cur: Hitter) =>
-                acc + cur.SingleB + cur.DoubleB + cur.TripleB + cur.HR,
-              0
-            )
-          : 0,
-        number: player.number,
-        image: player.img
-      }
-    })
-    .sort((a, b) => b.hit - a.hit)
-  totolHit(hit)
-  return hit.slice(0, 5)
-})
-
-function totolHit(hit: { name: string; hit: number; number: number }[]) {
-  totalHits.value = hit.reduce((acc, cur) => acc + cur.hit, 0)
-}
-
-const rankHitLoading = computed(() => {
-  return playersLeagueCareer.value.length == playerLength.value ? false : true
-})
-
-const filterPlayerRBI = computed(() => {
-  const rbi = playersLeagueCareer.value
-    .map((player) => {
-      return {
-        name: player.name,
-        rbi: Array.isArray(player.hitter)
-          ? player.hitter.reduce((acc: number, cur: Hitter) => acc + cur.RBI, 0)
-          : 0,
-        number: player.number,
-        image: player.img
-      }
-    })
-    .sort((a, b) => b.rbi - a.rbi)
-  totalRbi(rbi)
-  return rbi.slice(0, 5)
-})
-
-function totalRbi(rbi: { name: string; rbi: number; number: number }[]) {
-  totalRbis.value = rbi.reduce((acc, cur) => acc + cur.rbi, 0)
-}
-
-const rankRBILoading = computed(() => {
-  return playersLeagueCareer.value.length == playerLength.value ? false : true
-})
-
-const filterPlayerHR = computed(() => {
-  const hr = playersLeagueCareer.value
-    .map((player) => {
-      return {
-        name: player.name,
-        hr: Array.isArray(player.hitter)
-          ? player.hitter.reduce((acc: number, cur: Hitter) => acc + cur.HR, 0)
-          : 0,
-        number: player.number,
-        image: player.img
-      }
-    })
-    .sort((a, b) => b.hr - a.hr)
-  totalHr(hr)
-  return hr.slice(0, 5)
-})
-
-function totalHr(hr: { name: string; hr: number; number: number }[]) {
-  totalHrs.value = hr.reduce((acc, cur) => acc + cur.hr, 0)
-}
-
-const rankHRLoading = computed(() => {
-  return playersLeagueCareer.value.length == playerLength.value ? false : true
-})
 
 function fetchPlayerSheet() {
   loading.value = true
@@ -313,16 +130,6 @@ function handlePlayer(row: Player) {
   }
 }
 
-function numberOne({ rowIndex }: { rowIndex: number }) {
-  if (rowIndex === 0) {
-    return {
-      background: '#f0f9eb',
-      color: '#67c23a',
-      fontWeight: 'bold'
-    }
-  }
-}
-
 fetchPlayerSheet()
 </script>
 
@@ -336,42 +143,6 @@ fetchPlayerSheet()
   background-size: cover;
   padding: 30px;
 
-  .rankCard {
-    background-color: #b15560;
-
-    .playerCard {
-      height: 100%;
-      background-color: lightgray;
-      border: 1px solid #862633;
-
-      .playerCardBox {
-        display: flex;
-      }
-
-      .playerCardImg {
-        border-radius: 5px;
-        border: 1px solid black;
-        height: 100px;
-      }
-
-      .playerCardText {
-        margin-left: 5px;
-
-        .playerCardTitle {
-          font-size: 1.1rem;
-          font-weight: 500;
-          color: black;
-        }
-
-        .playerCardInfo {
-          font-size: 1rem;
-          font-weight: 400;
-          margin: 5px 0px;
-          color: black;
-        }
-      }
-    }
-  }
   /* tabs style */
 
   .tabsCard {
@@ -398,11 +169,6 @@ fetchPlayerSheet()
     border: 2px solid;
     border-radius: 20px;
     padding: 10px 20px;
-  }
-
-  .rankTable {
-    border-radius: 5px;
-    border: 2px solid black;
   }
 
   .homePageTable {
