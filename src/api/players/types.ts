@@ -191,6 +191,7 @@ export function emptyPlayer(): Player {
 export interface PlayerCareer {
   name: string
   number: number
+  img: string
   hitter: Hitter
 }
 
@@ -198,6 +199,7 @@ export function emptyPlayerCareer(): PlayerCareer {
   return {
     name: '',
     number: 0,
+    img: '',
     hitter: emptyHitter()
   }
 }
