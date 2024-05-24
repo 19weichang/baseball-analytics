@@ -4,7 +4,7 @@
       <el-card class="rankCard">
         <el-row>
           <el-col :md="8">
-            <el-card v-loading="rankHitLoading || loading" class="playerCard">
+            <el-card v-loading="rankLoading || loading" class="playerCard">
               <div class="playerCardBox">
                 <img
                   class="playerCardImg"
@@ -28,80 +28,37 @@
             </el-card>
           </el-col>
           <el-col :md="16">
-            <el-table
-              v-loading="rankHitLoading || loading"
-              class="rankTable"
-              :data="filterPlayerHit"
-              style="width: 100%"
-              :cell-style="numberOne"
-            >
-              <el-table-column fixed type="index" label="Top" width="50" />
-              <el-table-column prop="name" label="姓名">
-                <template #default="{ row }">
-                  <el-button
-                    class="playerNameBtn"
-                    text
-                    size="small"
-                    @click="emits('handlePlayer', row)"
-                  >
-                    {{ row.name }}
-                  </el-button>
-                </template>
-              </el-table-column>
-              <el-table-column prop="hit" label="安打" />
-            </el-table>
+            <RankTable
+              :rank="'hit'"
+              :loading="loading"
+              :rankLoading="rankLoading"
+              :filterData="filterPlayerHit"
+              @handlePlayer="emits('handlePlayer', $event)"
+            />
           </el-col>
         </el-row>
       </el-card>
     </el-collapse-item>
     <el-collapse-item title="打點 Top5" name="2">
       <el-card class="rankCard">
-        <el-table
-          v-loading="rankRBILoading || loading"
-          class="rankTable"
-          :data="filterPlayerRBI"
-          style="width: 100%"
-        >
-          <el-table-column fixed type="index" label="Top" width="50" />
-          <el-table-column prop="name" label="姓名">
-            <template #default="{ row }">
-              <el-button
-                class="playerNameBtn"
-                text
-                size="small"
-                @click="emits('handlePlayer', row)"
-              >
-                {{ row.name }}
-              </el-button>
-            </template>
-          </el-table-column>
-          <el-table-column prop="rbi" label="打點" />
-        </el-table>
+        <RankTable
+          :rank="'rbi'"
+          :loading="loading"
+          :rankLoading="rankLoading"
+          :filterData="filterPlayerRBI"
+          @handlePlayer="emits('handlePlayer', $event)"
+        />
       </el-card>
     </el-collapse-item>
     <el-collapse-item title="全壘打 Top5" name="3">
       <el-card class="rankCard">
-        <el-table
-          v-loading="rankHRLoading || loading"
-          class="rankTable"
-          :data="filterPlayerHR"
-          style="width: 100%"
-        >
-          <el-table-column fixed type="index" label="Top" width="50" />
-          <el-table-column prop="name" label="姓名">
-            <template #default="{ row }">
-              <el-button
-                class="playerNameBtn"
-                text
-                size="small"
-                @click="emits('handlePlayer', row)"
-              >
-                {{ row.name }}
-              </el-button>
-            </template>
-          </el-table-column>
-          <el-table-column prop="hr" label="全壘打" />
-        </el-table>
+        <RankTable
+          :rank="'hr'"
+          :loading="loading"
+          :rankLoading="rankLoading"
+          :filterData="filterPlayerHR"
+          @handlePlayer="emits('handlePlayer', $event)"
+        />
       </el-card>
     </el-collapse-item>
   </el-collapse>
@@ -110,6 +67,7 @@
 <script lang="ts" setup>
 import { Hitter, Player, PlayerCareer } from '@/api/players/types'
 import { ref, computed, defineProps } from 'vue'
+import RankTable from '@/components/rank/rankTable.vue'
 
 const props = defineProps<{
   loading: boolean
@@ -152,10 +110,6 @@ function totolHit(hit: { name: string; hit: number; number: number }[]) {
   totalHits.value = hit.reduce((acc, cur) => acc + cur.hit, 0)
 }
 
-const rankHitLoading = computed(() => {
-  return props.playersLeagueCareer.length == props.playerLength ? false : true
-})
-
 const filterPlayerRBI = computed(() => {
   const rbi = props.playersLeagueCareer
     .map((player) => {
@@ -176,10 +130,6 @@ const filterPlayerRBI = computed(() => {
 function totalRbi(rbi: { name: string; rbi: number; number: number }[]) {
   totalRbis.value = rbi.reduce((acc, cur) => acc + cur.rbi, 0)
 }
-
-const rankRBILoading = computed(() => {
-  return props.playersLeagueCareer.length == props.playerLength ? false : true
-})
 
 const filterPlayerHR = computed(() => {
   const hr = props.playersLeagueCareer
@@ -202,37 +152,15 @@ function totalHr(hr: { name: string; hr: number; number: number }[]) {
   totalHrs.value = hr.reduce((acc, cur) => acc + cur.hr, 0)
 }
 
-const rankHRLoading = computed(() => {
+const rankLoading = computed(() => {
   return props.playersLeagueCareer.length == props.playerLength ? false : true
 })
-
-function numberOne({ rowIndex }: { rowIndex: number }) {
-  if (rowIndex === 0) {
-    return {
-      background: '#f0f9eb',
-      color: '#67c23a',
-      fontWeight: 'bold'
-    }
-  }
-}
 </script>
 
 <style lang="scss" scoped>
 .rankTable {
   border-radius: 5px;
   border: 2px solid black;
-}
-
-.playerNameBtn {
-  padding: 0px;
-  font-size: 1.1rem;
-  cursor: pointer;
-  color: black !important;
-
-  &:hover {
-    text-decoration: underline;
-    color: #862633;
-  }
 }
 
 .rankCard {
