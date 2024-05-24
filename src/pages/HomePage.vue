@@ -1,6 +1,7 @@
 <template>
   <div class="homePage">
     <div class="block">
+      <div class="blockTitle">球員列表</div>
       <el-tabs type="border-card" class="tabsCard">
         <el-tab-pane label="打者">
           <el-row>
@@ -36,23 +37,35 @@
             </el-table>
           </el-row>
         </el-tab-pane>
-        <el-tab-pane label="投手">coming soon...</el-tab-pane>
+        <el-tab-pane label="投手">
+          <el-empty description="暫時無資料..." />
+        </el-tab-pane>
       </el-tabs>
     </div>
     <div class="block">
-      <PlayerRank
-        :loading="loading"
-        :playersLeagueCareer="playersLeagueCareer"
-        :playerLength="playerLength"
-        @handlePlayer="handlePlayer"
+      <div class="blockTitle">排行榜</div>
+      <el-tabs type="border-card" class="rankTabsCard">
+        <el-tab-pane label="打擊">
+          <PlayerRank
+            :loading="loading"
+            :playersLeagueCareer="playersLeagueCareer"
+            :playerLength="playerLength"
+            @handlePlayer="handlePlayer"
+        /></el-tab-pane>
+        <el-tab-pane label="投手">
+          <el-empty description="暫時無資料..." />
+        </el-tab-pane>
+      </el-tabs>
+    </div>
+    <div class="block">
+      <div class="blockTitle">團隊</div>
+      <StatisticalData
+        :totalHits="totalHits"
+        :totalRbis="totalRbis"
+        :totalHrs="totalHrs"
+        :thisYearLeagueGame="thisYearLeagueGame"
       />
     </div>
-    <StatisticalData
-      :totalHits="totalHits"
-      :totalRbis="totalRbis"
-      :totalHrs="totalHrs"
-      :thisYearLeagueGame="thisYearLeagueGame"
-    />
   </div>
 </template>
 
@@ -164,11 +177,37 @@ fetchPlayerSheet()
     color: white !important;
   }
 
+  .rankTabsCard {
+    margin: 10px 0px;
+    background-color: #b15560;
+  }
+  .rankTabsCard:deep .el-tabs__header {
+    background-color: #b15560 !important;
+  }
+
+  .rankTabsCard:deep .el-tabs__header .is-top {
+    background-color: #862633 !important;
+    color: grey !important;
+  }
+
+  .rankTabsCard:deep .el-tabs__header .is-active {
+    background-color: #b15560 !important;
+    color: white !important;
+  }
+
   .block {
     background-color: rgba(0, 0, 0, 0.3);
     border: 2px solid;
     border-radius: 20px;
     padding: 10px 20px;
+    margin: 10px 0px;
+
+    .blockTitle {
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin: 10px 0px;
+      color: white;
+    }
   }
 
   .homePageTable {
