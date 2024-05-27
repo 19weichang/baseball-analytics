@@ -88,7 +88,7 @@ export enum PlayerEnglish {
   '滾地球' = 'GO',
   '犧牲觸擊' = 'SH',
   '攻擊指數' = 'TA',
-  '失誤' = 'ERRCH',
+  '失誤上壘' = 'ERRCH',
   '盜壘' = 'SB',
   '盜壘失敗' = 'CS',
   '盜壘成功率' = 'SBP'
@@ -202,6 +202,56 @@ export function emptyPlayerCareer(): PlayerCareer {
     img: '',
     hitter: emptyHitter()
   }
+}
+
+export enum HitterChinese {
+  season = '年度',
+  PA = '打席數',
+  AB = '打數',
+  SingleB = '一壘安打',
+  DoubleB = '二壘安打',
+  TripleB = '三壘安打',
+  HR = '全壘打',
+  RBI = '打點',
+  R = '得分',
+  BB = '保送',
+  SO = '三振',
+  SF = '高飛犧牲打',
+  SH = '犧牲觸擊',
+  ERRCH = '失誤上壘',
+  HBP = '觸身球',
+  AVG = '打擊率',
+  OBP = '上壘率',
+  SLG = '長打率',
+  OPS = '綜合攻擊指數',
+  SB = '盜壘',
+  CS = '盜壘失敗',
+  SBP = '盜壘成功率'
+}
+
+export enum HitterEnglish {
+  '年度' = 'season',
+  '打席數' = 'PA',
+  '打數' = 'AB',
+  '一壘安打' = 'SingleB',
+  '二壘安打' = 'DoubleB',
+  '三壘安打' = 'TripleB',
+  '全壘打' = 'HR',
+  '打點' = 'RBI',
+  '得分' = 'R',
+  '保送' = 'BB',
+  '三振' = 'SO',
+  '高飛犧牲打' = 'SF',
+  '犧牲觸擊' = 'SH',
+  '失誤上壘' = 'ERRCH',
+  '觸身球' = 'HBP',
+  '打擊率' = 'AVG',
+  '上壘率' = 'OBP',
+  '長打率' = 'SLG',
+  '綜合攻擊指數' = 'OPS',
+  '盜壘' = 'SB',
+  '盜壘失敗' = 'CS',
+  '盜壘成功率' = 'SBP'
 }
 
 export interface Hitter {

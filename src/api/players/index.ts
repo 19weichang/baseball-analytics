@@ -1,7 +1,7 @@
 // import { read } from '../../utils/xlsx'
 import * as xlsx from 'xlsx'
 import { readWorkbookFromRemoteFile } from '../../utils/xlsx'
-import { Player, PlayerEnglish, Hitter } from './types'
+import { Player, PlayerEnglish, Hitter, HitterEnglish } from './types'
 import { utils } from 'xlsx'
 
 const key = import.meta.env.VITE_GOOGLE_API_KEY
@@ -77,7 +77,8 @@ export async function getPlayerHitter(player: string) {
     }
     readWorkbookFromRemoteFile(sheetUrl, callback)
   })
-  const playerInfo: Hitter[] = (await file) as Hitter[]
+  const Info: Hitter[] = (await file) as Hitter[]
+  const playerInfo = transformHitterEnglish(Info) as Hitter[]
   const gameLength = playerInfo.length
   const result: Hitter[] = []
   for (const key in playerInfo) {
@@ -210,8 +211,24 @@ export async function getPlayerHitter(player: string) {
     ...item,
     season: item.season
   }))
-
   return arr
+  // return transformHitterEnglish(arr) as Hitter[]
+}
+
+function transformHitterEnglish(hitters: Hitter[]) {
+  const hitter = hitters.map((item) => {
+    const obj = {}
+    const keys = Object.keys(HitterEnglish)
+    keys.forEach((key) => {
+      if (isVaildKey(key, HitterEnglish)) {
+        const en = HitterEnglish[key]
+        obj[en] = item[key]
+      }
+    })
+    return obj
+  })
+
+  return hitter
 }
 
 // export function getplayer(sheetId: string, player: string) {

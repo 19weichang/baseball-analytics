@@ -57,7 +57,7 @@
               <el-table-column prop="SO" label="三振" />
               <el-table-column prop="SF" label="高飛犧牲打" />
               <el-table-column prop="SH" label="犧牲觸擊" />
-              <el-table-column prop="ERRCH" label="失誤" />
+              <el-table-column prop="ERRCH" label="失誤上壘" />
               <el-table-column prop="HBP" label="觸身球" />
               <el-table-column prop="SB" label="盜壘成功" />
               <el-table-column prop="CS" label="盜壘失敗" />

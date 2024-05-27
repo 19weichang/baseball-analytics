@@ -19,6 +19,9 @@ export interface Game {
   BB: number
   SO: number
   HBP: number
+  ERRCH: number
+  CI: number
+  SB: number
   SF: number
   SH: number
   AVG: number
@@ -49,6 +52,9 @@ export function emptyGame(): Game {
     BB: 0,
     SO: 0,
     HBP: 0,
+    ERRCH: 0,
+    CI: 0,
+    SB: 0,
     SF: 0,
     SH: 0,
     AVG: 0,
@@ -56,4 +62,70 @@ export function emptyGame(): Game {
     SLG: 0,
     OPS: 0
   }
+}
+
+export enum GameEnglish {
+  '年度' = 'season',
+  '賽事' = 'gameType',
+  '組別' = 'group',
+  '球隊' = 'team',
+  '時間' = 'time',
+  '球員' = 'player',
+  '背號' = 'number',
+  '守備位置' = 'position',
+  '打席數' = 'PA',
+  '打數' = 'AB',
+  '得分' = 'R',
+  '安打' = 'H',
+  '一壘安打' = 'SingleB',
+  '二壘安打' = 'DoubleB',
+  '三壘安打' = 'TripleB',
+  '全壘打' = 'HR',
+  '打點' = 'RBI',
+  '保送' = 'BB',
+  '三振' = 'SO',
+  '觸身球' = 'HBP',
+  '失誤上壘' = 'ERRCH',
+  '捕手妨礙打擊' = 'CI',
+  '盜壘' = 'SB',
+  '盜壘失敗' = 'CS',
+  '高飛犧牲打' = 'SF',
+  '犧牲觸擊' = 'SH',
+  '打擊率' = 'AVG',
+  '上壘率' = 'OBP',
+  '長打率' = 'SLG',
+  '綜合攻擊指數' = 'OPS'
+}
+
+export enum GameChinese {
+  '年度' = 'season',
+  '賽事' = 'gameType',
+  '組別' = 'group',
+  '球隊' = 'team',
+  '時間' = 'time',
+  '球員' = 'player',
+  '背號' = 'number',
+  '守備位置' = 'position',
+  '打席數' = 'PA',
+  '打數' = 'AB',
+  '得分' = 'R',
+  '安打' = 'H',
+  '一壘安打' = 'SingleB',
+  '二壘安打' = 'DoubleB',
+  '三壘安打' = 'TripleB',
+  '全壘打' = 'HR',
+  '打點' = 'RBI',
+  '保送' = 'BB',
+  '三振' = 'SO',
+  '觸身球' = 'HBP',
+  '失誤上壘' = 'ERRCH',
+  '捕手妨礙打擊' = 'CI',
+  '盜壘' = 'SB',
+  '盜壘失敗' = 'CS',
+  '高飛犧牲打' = 'SF',
+  '犧牲觸擊' = 'SH',
+  '打擊率' = 'AVG',
+  '上壘率' = 'OBP',
+  '長打率' = 'SLG',
+  '綜合攻擊指數' = 'OPS'
 }
