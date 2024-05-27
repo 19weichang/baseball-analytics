@@ -11,7 +11,7 @@
                   :src="
                     filterPlayerHit[0]?.image
                       ? filterPlayerHit[0]?.image
-                      : 'public/image/emptyPlayer.png'
+                      : '/baseball-analytics/image/emptyPlayer.png'
                   "
                 />
                 <div class="playerCardText">
@@ -61,6 +61,28 @@
         />
       </el-card>
     </el-collapse-item>
+    <el-collapse-item title="打擊率 Top5" name="4">
+      <el-card class="rankCard">
+        <RankTable
+          :rank="'avg'"
+          :loading="loading"
+          :rankLoading="rankLoading"
+          :filterData="filterPlayerAVG"
+          @handlePlayer="emits('handlePlayer', $event)"
+        />
+      </el-card>
+    </el-collapse-item>
+    <el-collapse-item title="盜壘 Top5" name="5">
+      <el-card class="rankCard">
+        <RankTable
+          :rank="'sb'"
+          :loading="loading"
+          :rankLoading="rankLoading"
+          :filterData="filterPlayerSB"
+          @handlePlayer="emits('handlePlayer', $event)"
+        />
+      </el-card>
+    </el-collapse-item>
   </el-collapse>
 </template>
 
@@ -82,6 +104,8 @@ const emits = defineEmits<{
 const totalHits = ref<number>(0)
 const totalRbis = ref<number>(0)
 const totalHrs = ref<number>(0)
+const totalAvg = ref<number>(0)
+const totalSb = ref<number>(0)
 const activeNames = ref(['1'])
 
 const filterPlayerHit = computed(() => {
@@ -102,11 +126,11 @@ const filterPlayerHit = computed(() => {
       }
     })
     .sort((a, b) => b.hit - a.hit)
-  totolHit(hit)
+  countTotolHit(hit)
   return hit.slice(0, 5)
 })
 
-function totolHit(hit: { name: string; hit: number; number: number }[]) {
+function countTotolHit(hit: { name: string; hit: number; number: number }[]) {
   totalHits.value = hit.reduce((acc, cur) => acc + cur.hit, 0)
 }
 
@@ -123,11 +147,11 @@ const filterPlayerRBI = computed(() => {
       }
     })
     .sort((a, b) => b.rbi - a.rbi)
-  totalRbi(rbi)
+  countTotalRbi(rbi)
   return rbi.slice(0, 5)
 })
 
-function totalRbi(rbi: { name: string; rbi: number; number: number }[]) {
+function countTotalRbi(rbi: { name: string; rbi: number; number: number }[]) {
   totalRbis.value = rbi.reduce((acc, cur) => acc + cur.rbi, 0)
 }
 
@@ -144,12 +168,57 @@ const filterPlayerHR = computed(() => {
       }
     })
     .sort((a, b) => b.hr - a.hr)
-  totalHr(hr)
+  countTotalHr(hr)
   return hr.slice(0, 5)
 })
 
-function totalHr(hr: { name: string; hr: number; number: number }[]) {
+function countTotalHr(hr: { name: string; hr: number; number: number }[]) {
   totalHrs.value = hr.reduce((acc, cur) => acc + cur.hr, 0)
+}
+
+const filterPlayerAVG = computed(() => {
+  const avg = props.playersLeagueCareer
+    .map((player) => {
+      return {
+        name: player.name,
+        avg: Array.isArray(player.hitter)
+          ? player.hitter.reduce(
+              (acc: number, cur: Hitter) => acc + cur.AVG,
+              0
+            ) / player.hitter.length
+          : 0,
+        number: player.number,
+        image: player.img
+      }
+    })
+    .sort((a, b) => b.avg - a.avg)
+  countTotalAvg(avg)
+  return avg.slice(0, 5)
+})
+
+function countTotalAvg(avg: { name: string; avg: number; number: number }[]) {
+  totalAvg.value = avg.reduce((acc, cur) => acc + cur.avg, 0)
+}
+
+const filterPlayerSB = computed(() => {
+  const sb = props.playersLeagueCareer
+    .map((player) => {
+      return {
+        name: player.name,
+        sb: Array.isArray(player.hitter)
+          ? player.hitter.reduce((acc: number, cur: Hitter) => acc + cur.SB, 0)
+          : 0,
+        number: player.number,
+        image: player.img
+      }
+    })
+    .sort((a, b) => b.sb - a.sb)
+  countTotalSb(sb)
+  return sb.slice(0, 5)
+})
+
+function countTotalSb(sb: { name: string; sb: number; number: number }[]) {
+  totalSb.value = sb.reduce((acc, cur) => acc + cur.sb, 0)
 }
 
 const rankLoading = computed(() => {

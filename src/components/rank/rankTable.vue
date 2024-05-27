@@ -63,6 +63,10 @@ function rankName() {
       return '打點'
     case 'hr':
       return '全壘打'
+    case 'avg':
+      return '打擊率'
+    case 'sb':
+      return '盜壘'
   }
 }
 </script>
