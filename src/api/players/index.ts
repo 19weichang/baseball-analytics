@@ -94,6 +94,8 @@ export async function getPlayerHitter(player: string) {
     const R = item.R
     const BB = item.BB
     const SO = item.SO
+    const GO = item.GO
+    const AO = item.AO
     const SF = item.SF
     const SH = item.SH
     const ERRCH = item.ERRCH
@@ -105,6 +107,7 @@ export async function getPlayerHitter(player: string) {
     const SB = item.SB
     const CS = item.CS
     const SBP = item.SBP
+    const E = item.E
 
     if (!result[parseInt(season)]) {
       result[parseInt(season)] = {
@@ -119,6 +122,8 @@ export async function getPlayerHitter(player: string) {
         R: 0,
         BB: 0,
         SO: 0,
+        GO: 0,
+        AO: 0,
         SF: 0,
         SH: 0,
         ERRCH: 0,
@@ -129,7 +134,8 @@ export async function getPlayerHitter(player: string) {
         OPS: 0,
         SB: 0,
         CS: 0,
-        SBP: 0
+        SBP: 0,
+        E: 0
       }
     }
 
@@ -143,6 +149,8 @@ export async function getPlayerHitter(player: string) {
     result[parseInt(season)].R += R
     result[parseInt(season)].BB += BB
     result[parseInt(season)].SO += SO
+    result[parseInt(season)].GO += GO
+    result[parseInt(season)].AO += AO
     result[parseInt(season)].SF += SF
     result[parseInt(season)].SH += SH
     result[parseInt(season)].ERRCH += ERRCH
@@ -154,6 +162,7 @@ export async function getPlayerHitter(player: string) {
     result[parseInt(season)].SB += SB
     result[parseInt(season)].CS += CS
     result[parseInt(season)].SBP += SBP / gameLength
+    result[parseInt(season)].E += E
   }
 
   const careerArray = Object.entries(result).map(
@@ -170,6 +179,8 @@ export async function getPlayerHitter(player: string) {
         R,
         BB,
         SO,
+        GO,
+        AO,
         SF,
         SH,
         ERRCH,
@@ -180,7 +191,8 @@ export async function getPlayerHitter(player: string) {
         OPS,
         SB,
         CS,
-        SBP
+        SBP,
+        E
       }
     ]) => ({
       season,
@@ -194,6 +206,8 @@ export async function getPlayerHitter(player: string) {
       R,
       BB,
       SO,
+      GO,
+      AO,
       SF,
       SH,
       ERRCH,
@@ -204,7 +218,8 @@ export async function getPlayerHitter(player: string) {
       OPS,
       SB,
       CS,
-      SBP
+      SBP,
+      E
     })
   )
   const arr = careerArray.map((item) => ({
@@ -212,7 +227,6 @@ export async function getPlayerHitter(player: string) {
     season: item.season
   }))
   return arr
-  // return transformHitterEnglish(arr) as Hitter[]
 }
 
 function transformHitterEnglish(hitters: Hitter[]) {

@@ -55,6 +55,8 @@
               <el-table-column prop="R" label="得分" />
               <el-table-column prop="BB" label="四壞" />
               <el-table-column prop="SO" label="三振" />
+              <el-table-column prop="GO" label="滾地出局" />
+              <el-table-column prop="AO" label="飛球出局" />
               <el-table-column prop="SF" label="高飛犧牲打" />
               <el-table-column prop="SH" label="犧牲觸擊" />
               <el-table-column prop="ERRCH" label="失誤上壘" />
@@ -78,6 +80,7 @@
                 :formatter="rounding"
               />
               <el-table-column prop="OPS" label="OPS" :formatter="rounding" />
+              <el-table-column prop="E" label="守備失誤" />
             </el-table>
           </div>
           <div v-else>暫無選手資料</div>

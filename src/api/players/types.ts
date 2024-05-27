@@ -24,7 +24,6 @@ export enum PlayerChinese {
   SingleB = '一壘安打',
   DoubleB = '二壘安打',
   TripleB = '三壘安打',
-  AO = '飛球出局',
   BBP = '保送率',
   BBK = '保送三振比',
   EBH = '長打數',
@@ -37,13 +36,15 @@ export enum PlayerChinese {
   R = '得分',
   RBI = '打點',
   SF = '高飛犧牲打',
-  GO = '滾地球',
+  GO = '滾地球出局',
+  AO = '飛球出局',
   SH = '犧牲觸擊',
   TA = '攻擊指數',
   ERRCH = '失誤上壘',
   SB = '盜壘',
   CS = '盜壘失敗',
-  SBP = '盜壘成功率'
+  SBP = '盜壘成功率',
+  E = '守備失誤'
 }
 
 export enum PlayerEnglish {
@@ -73,6 +74,7 @@ export enum PlayerEnglish {
   '二壘安打' = 'DoubleB',
   '三壘安打' = 'TripleB',
   '飛球出局' = 'AO',
+  '滾地球出局' = 'GO',
   '保送率' = 'BBP',
   '保送三振比' = 'BBK',
   '長打數' = 'EBH',
@@ -85,13 +87,13 @@ export enum PlayerEnglish {
   '得分' = 'R',
   '打點' = 'RBI',
   '高飛犧牲打' = 'SF',
-  '滾地球' = 'GO',
   '犧牲觸擊' = 'SH',
   '攻擊指數' = 'TA',
   '失誤上壘' = 'ERRCH',
   '盜壘' = 'SB',
   '盜壘失敗' = 'CS',
-  '盜壘成功率' = 'SBP'
+  '盜壘成功率' = 'SBP',
+  '守備失誤' = 'E'
 }
 
 export interface Player {
@@ -216,17 +218,20 @@ export enum HitterChinese {
   R = '得分',
   BB = '保送',
   SO = '三振',
+  GO = '滾地球出局',
+  AO = '飛球出局',
   SF = '高飛犧牲打',
   SH = '犧牲觸擊',
   ERRCH = '失誤上壘',
   HBP = '觸身球',
+  SB = '盜壘',
+  CS = '盜壘失敗',
+  SBP = '盜壘成功率',
   AVG = '打擊率',
   OBP = '上壘率',
   SLG = '長打率',
   OPS = '綜合攻擊指數',
-  SB = '盜壘',
-  CS = '盜壘失敗',
-  SBP = '盜壘成功率'
+  E = '守備失誤'
 }
 
 export enum HitterEnglish {
@@ -241,17 +246,20 @@ export enum HitterEnglish {
   '得分' = 'R',
   '保送' = 'BB',
   '三振' = 'SO',
+  '滾地球出局' = 'GO',
+  '飛球出局' = 'AO',
   '高飛犧牲打' = 'SF',
   '犧牲觸擊' = 'SH',
   '失誤上壘' = 'ERRCH',
   '觸身球' = 'HBP',
+  '盜壘' = 'SB',
+  '盜壘失敗' = 'CS',
+  '盜壘成功率' = 'SBP',
   '打擊率' = 'AVG',
   '上壘率' = 'OBP',
   '長打率' = 'SLG',
   '綜合攻擊指數' = 'OPS',
-  '盜壘' = 'SB',
-  '盜壘失敗' = 'CS',
-  '盜壘成功率' = 'SBP'
+  '守備失誤' = 'E'
 }
 
 export interface Hitter {
@@ -266,6 +274,8 @@ export interface Hitter {
   R: number
   BB: number
   SO: number
+  GO: number
+  AO: number
   SF: number
   SH: number
   ERRCH: number
@@ -277,6 +287,7 @@ export interface Hitter {
   SB: number
   CS: number
   SBP: number
+  E: number
 }
 
 export function emptyHitter(): Hitter {
@@ -292,6 +303,8 @@ export function emptyHitter(): Hitter {
     R: 0,
     BB: 0,
     SO: 0,
+    GO: 0,
+    AO: 0,
     SF: 0,
     SH: 0,
     ERRCH: 0,
@@ -302,6 +315,7 @@ export function emptyHitter(): Hitter {
     OPS: 0,
     SB: 0,
     CS: 0,
-    SBP: 0
+    SBP: 0,
+    E: 0
   }
 }

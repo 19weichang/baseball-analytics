@@ -18,6 +18,8 @@ export interface Game {
   RBI: number
   BB: number
   SO: number
+  AO: number
+  GO: number
   HBP: number
   ERRCH: number
   CI: number
@@ -28,6 +30,7 @@ export interface Game {
   OBP: number
   SLG: number
   OPS: number
+  E: number
 }
 
 export function emptyGame(): Game {
@@ -51,6 +54,8 @@ export function emptyGame(): Game {
     RBI: 0,
     BB: 0,
     SO: 0,
+    AO: 0,
+    GO: 0,
     HBP: 0,
     ERRCH: 0,
     CI: 0,
@@ -60,7 +65,8 @@ export function emptyGame(): Game {
     AVG: 0,
     OBP: 0,
     SLG: 0,
-    OPS: 0
+    OPS: 0,
+    E: 0
   }
 }
 
@@ -84,6 +90,8 @@ export enum GameEnglish {
   '打點' = 'RBI',
   '保送' = 'BB',
   '三振' = 'SO',
+  '飛球出局' = 'AO',
+  '滾地出局' = 'GO',
   '觸身球' = 'HBP',
   '失誤上壘' = 'ERRCH',
   '捕手妨礙打擊' = 'CI',
@@ -94,7 +102,8 @@ export enum GameEnglish {
   '打擊率' = 'AVG',
   '上壘率' = 'OBP',
   '長打率' = 'SLG',
-  '綜合攻擊指數' = 'OPS'
+  '綜合攻擊指數' = 'OPS',
+  '守備失誤' = 'E'
 }
 
 export enum GameChinese {
@@ -117,6 +126,8 @@ export enum GameChinese {
   '打點' = 'RBI',
   '保送' = 'BB',
   '三振' = 'SO',
+  '飛球出局' = 'AO',
+  '滾地出局' = 'GO',
   '觸身球' = 'HBP',
   '失誤上壘' = 'ERRCH',
   '捕手妨礙打擊' = 'CI',
@@ -127,5 +138,6 @@ export enum GameChinese {
   '打擊率' = 'AVG',
   '上壘率' = 'OBP',
   '長打率' = 'SLG',
-  '綜合攻擊指數' = 'OPS'
+  '綜合攻擊指數' = 'OPS',
+  '守備失誤' = 'E'
 }
