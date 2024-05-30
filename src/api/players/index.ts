@@ -106,7 +106,6 @@ export async function getPlayerHitter(player: string) {
     const OPS = item.OPS
     const SB = item.SB
     const CS = item.CS
-    const SBP = item.SBP
     const E = item.E
 
     if (!result[parseInt(season)]) {
@@ -161,7 +160,7 @@ export async function getPlayerHitter(player: string) {
     result[parseInt(season)].OPS += OPS / gameLength
     result[parseInt(season)].SB += SB
     result[parseInt(season)].CS += CS
-    result[parseInt(season)].SBP += SBP / gameLength
+    result[parseInt(season)].SBP = SB / (SB + CS) || 0
     result[parseInt(season)].E += E
   }
 
@@ -224,7 +223,8 @@ export async function getPlayerHitter(player: string) {
   )
   const arr = careerArray.map((item) => ({
     ...item,
-    season: item.season
+    season: item.season,
+    SBP: item.SB / (item.SB + item.CS) || 0
   }))
   return arr
 }

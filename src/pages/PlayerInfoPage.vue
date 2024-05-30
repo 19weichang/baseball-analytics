@@ -55,13 +55,13 @@
               <el-table-column prop="R" label="得分" />
               <el-table-column prop="BB" label="四壞" />
               <el-table-column prop="SO" label="三振" />
-              <el-table-column prop="GO" label="滾地出局" />
+              <el-table-column prop="GO" label="滾地球出局" />
               <el-table-column prop="AO" label="飛球出局" />
               <el-table-column prop="SF" label="高飛犧牲打" />
               <el-table-column prop="SH" label="犧牲觸擊" />
               <el-table-column prop="ERRCH" label="失誤上壘" />
               <el-table-column prop="HBP" label="觸身球" />
-              <el-table-column prop="SB" label="盜壘成功" />
+              <el-table-column prop="SB" label="盜壘" />
               <el-table-column prop="CS" label="盜壘失敗" />
               <el-table-column
                 prop="SBP"
@@ -85,7 +85,9 @@
           </div>
           <div v-else>暫無選手資料</div>
         </el-tab-pane>
-        <el-tab-pane label="進階數據"></el-tab-pane>
+        <el-tab-pane label="進階數據">
+          <el-empty description="暫時無資料..." />
+        </el-tab-pane>
         <el-tab-pane label="對戰成績">
           <BattleGame :games="games" />
         </el-tab-pane>
@@ -158,18 +160,28 @@ interface SummaryMethod<T> {
 }
 
 const getSummary = computed(() => {
-  return (item: SummaryMethod<Player>) => {
+  return (item: SummaryMethod<Hitter>) => {
     const { columns, data } = item
-    const sum: Player[] = []
+    const sum: Hitter[] = []
     columns.forEach((column, index) => {
       if (index === 0) {
-        sum[index] = '總計' as unknown as Player
+        sum[index] = '總計' as unknown as Hitter
         return
       }
 
       const values = data.map((item) =>
-        Number(item[column.property as keyof Player])
+        Number(item[column.property as keyof Hitter])
       )
+
+      if (column.property === 'SBP') {
+        const sb = data.map((item) => item.SB)
+        const cs = data.map((item) => item.CS)
+        const sbp =
+          sb.reduce((a, b) => a + b) /
+          (sb.reduce((a, b) => a + b) + cs.reduce((a, b) => a + b))
+        sum[index] = sbp.toFixed(3) as unknown as Hitter
+        return
+      }
 
       if (
         column.property === 'AVG' ||
@@ -178,20 +190,20 @@ const getSummary = computed(() => {
         column.property === 'OPS'
       ) {
         if (values.length === 0) {
-          sum[index] = 0 as unknown as Player
+          sum[index] = 0 as unknown as Hitter
         } else {
           sum[index] = (
             values.reduce((a: number, b: number) => a + b) / values.length
-          ).toFixed(3) as unknown as Player
+          ).toFixed(3) as unknown as Hitter
         }
       } else {
         if (values.length === 0) {
-          sum[index] = 0 as unknown as Player
+          sum[index] = 0 as unknown as Hitter
         } else {
           sum[index] = values.reduce(
             (acc: number, cur: number) => acc + cur,
             0
-          ) as unknown as Player
+          ) as unknown as Hitter
         }
       }
       return

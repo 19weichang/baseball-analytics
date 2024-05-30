@@ -18,20 +18,20 @@
       <el-table-column prop="R" label="得分" />
       <el-table-column prop="BB" label="四壞" />
       <el-table-column prop="SO" label="三振" />
-      <el-table-column prop="GO" label="滾地出局" />
+      <el-table-column prop="GO" label="滾地球出局" />
       <el-table-column prop="AO" label="飛球出局" />
       <el-table-column prop="SF" label="高飛犧牲打" />
       <el-table-column prop="SH" label="犧牲觸擊" />
       <el-table-column prop="ERRCH" label="失誤上壘" />
       <el-table-column prop="HBP" label="觸身球" />
       <el-table-column prop="CI" label="捕手妨礙打擊" />
-      <el-table-column prop="SB" label="盜壘成功" />
+      <el-table-column prop="SB" label="盜壘" />
       <el-table-column prop="CS" label="盜壘失敗" />
       <el-table-column prop="SBP" label="盜壘成功率" :formatter="changeWord" />
-      <el-table-column prop="AVG" label="AVG" />
-      <el-table-column prop="OBP" label="上壘率" />
-      <el-table-column prop="SLG" label="長打率" />
-      <el-table-column prop="OPS" label="OPS" />
+      <el-table-column prop="AVG" label="AVG" :formatter="rounding" />
+      <el-table-column prop="OBP" label="上壘率" :formatter="rounding" />
+      <el-table-column prop="SLG" label="長打率" :formatter="rounding" />
+      <el-table-column prop="OPS" label="OPS" :formatter="rounding" />
       <el-table-column prop="E" label="守備失誤" />
     </el-table>
   </div>
@@ -41,6 +41,7 @@
 import { defineProps } from 'vue'
 import { Game } from '../../api/games/types'
 import { Hitter } from '../../api/players/types'
+import { TableColumnCtx } from 'element-plus'
 
 const props = defineProps<{
   games: Game[]
@@ -48,10 +49,17 @@ const props = defineProps<{
 
 function changeWord(row: Hitter) {
   if (typeof row.SBP === 'number') {
-    return row.SBP
+    return row.SBP.toFixed(3)
   } else {
     return 0
   }
+}
+
+function rounding(row: Hitter, column: TableColumnCtx<Hitter>, value: number) {
+  if (!row) {
+    console.log(row, column, value)
+  }
+  return value.toFixed(3)
 }
 </script>
 

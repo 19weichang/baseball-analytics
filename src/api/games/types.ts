@@ -24,6 +24,8 @@ export interface Game {
   ERRCH: number
   CI: number
   SB: number
+  CS: number
+  SBP: number
   SF: number
   SH: number
   AVG: number
@@ -60,6 +62,8 @@ export function emptyGame(): Game {
     ERRCH: 0,
     CI: 0,
     SB: 0,
+    CS: 0,
+    SBP: 0,
     SF: 0,
     SH: 0,
     AVG: 0,
@@ -91,12 +95,13 @@ export enum GameEnglish {
   '保送' = 'BB',
   '三振' = 'SO',
   '飛球出局' = 'AO',
-  '滾地出局' = 'GO',
+  '滾地球出局' = 'GO',
   '觸身球' = 'HBP',
   '失誤上壘' = 'ERRCH',
   '捕手妨礙打擊' = 'CI',
   '盜壘' = 'SB',
   '盜壘失敗' = 'CS',
+  '盜壘成功率' = 'SBP',
   '高飛犧牲打' = 'SF',
   '犧牲觸擊' = 'SH',
   '打擊率' = 'AVG',
