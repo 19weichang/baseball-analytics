@@ -284,4 +284,10 @@ fetchPlayerSheet()
     border-bottom: 1px solid #862633 !important;
   }
 }
+
+@media screen and (max-width: 768px) {
+  .homePage {
+    padding: 30px 5px;
+  }
+}
 </style>
