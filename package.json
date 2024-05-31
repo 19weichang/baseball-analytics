@@ -14,9 +14,11 @@
   },
   "dependencies": {
     "@vueuse/router": "^10.9.0",
+    "apexcharts": "^3.49.1",
     "element-plus": "^2.7.0",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",
+    "vue3-apexcharts": "^1.5.3",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
