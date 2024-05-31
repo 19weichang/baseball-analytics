@@ -113,6 +113,17 @@
         </div>
       </div>
     </el-card>
+    <el-card v-loading="loading">
+      <div class="hitChart">
+        <div class="hitChartTool">
+          <div class="hitChartTitle">打擊表現</div>
+          <div></div>
+        </div>
+        <div>
+          <PerformanceChart :games="games" :gameLength="gameLength" />
+        </div>
+      </div>
+    </el-card>
   </div>
 </template>
 
@@ -121,6 +132,7 @@ import { ref, computed } from 'vue'
 import { Hitter, Player, PlayerCareer } from '@/api/players/types'
 import BattleGame from '@/components/battle/battleGame.vue'
 import HitAdvanced from '@/components/advanced/hitAdvanced.vue'
+import PerformanceChart from '@/components/advanced/performanceChart.vue'
 import { TableColumnCtx } from 'element-plus'
 import { useRouteQuery } from '@vueuse/router'
 import { getGame } from '@/api/games/index'
