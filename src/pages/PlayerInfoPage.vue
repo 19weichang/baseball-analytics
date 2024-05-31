@@ -85,13 +85,33 @@
           </div>
           <div v-else>暫無選手資料</div>
         </el-tab-pane>
-        <el-tab-pane label="進階數據">
-          <el-empty description="暫時無資料..." />
-        </el-tab-pane>
         <el-tab-pane label="對戰成績">
           <BattleGame :games="games" />
         </el-tab-pane>
       </el-tabs>
+    </el-card>
+    <el-card v-loading="loading">
+      <div class="hitChart">
+        <div class="hitChartTool">
+          <div class="hitChartTitle">打擊指數</div>
+          <el-select
+            v-model="gameLength"
+            placeholder="比賽場數"
+            size="small"
+            style="width: 80px"
+          >
+            <el-option
+              v-for="item in gameLengthOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </div>
+        <div>
+          <HitAdvanced :games="games" :gameLength="gameLength" />
+        </div>
+      </div>
     </el-card>
   </div>
 </template>
@@ -100,6 +120,7 @@
 import { ref, computed } from 'vue'
 import { Hitter, Player, PlayerCareer } from '@/api/players/types'
 import BattleGame from '@/components/battle/battleGame.vue'
+import HitAdvanced from '@/components/advanced/hitAdvanced.vue'
 import { TableColumnCtx } from 'element-plus'
 import { useRouteQuery } from '@vueuse/router'
 import { getGame } from '@/api/games/index'
@@ -218,6 +239,13 @@ function rounding(row: Hitter, column: TableColumnCtx<Hitter>, value: number) {
   }
   return value.toFixed(3)
 }
+
+const gameLength = ref('5')
+const gameLengthOptions = [
+  { value: '5', label: '近五場' },
+  { value: '10', label: '近十場' },
+  { value: 'all', label: '全部' }
+]
 </script>
 
 <style scoped>
@@ -226,6 +254,27 @@ function rounding(row: Hitter, column: TableColumnCtx<Hitter>, value: number) {
   background-image: url('/baseball-analytics/image/redBackground.jpg');
   background-size: cover;
   padding: 20px;
+}
+
+.hitChart {
+  background-color: #b15560;
+  padding: 20px;
+}
+
+.hitChartTool {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  background-color: #862633;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.hitChartTitle {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: white;
 }
 
 .el-table {
