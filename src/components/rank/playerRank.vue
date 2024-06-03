@@ -1,5 +1,5 @@
 <template>
-  <el-collapse v-model="activeNames">
+  <el-collapse v-model="activeNames" accordion>
     <el-collapse-item title="安打 Top5" name="1">
       <el-card class="rankCard">
         <el-row>
@@ -99,6 +99,11 @@ const props = defineProps<{
 
 const emits = defineEmits<{
   (n: 'handlePlayer', s: Player): void
+  (s: 'totalHits', n: number): void
+  (s: 'totalRbis', n: number): void
+  (s: 'totalHrs', n: number): void
+  (s: 'totalAvg', n: number): void
+  (s: 'totalSb', n: number): void
 }>()
 
 const totalHits = ref<number>(0)
@@ -132,6 +137,7 @@ const filterPlayerHit = computed(() => {
 
 function countTotolHit(hit: { name: string; hit: number; number: number }[]) {
   totalHits.value = hit.reduce((acc, cur) => acc + cur.hit, 0)
+  emits('totalHits', totalHits.value)
 }
 
 const filterPlayerRBI = computed(() => {
@@ -153,6 +159,7 @@ const filterPlayerRBI = computed(() => {
 
 function countTotalRbi(rbi: { name: string; rbi: number; number: number }[]) {
   totalRbis.value = rbi.reduce((acc, cur) => acc + cur.rbi, 0)
+  emits('totalRbis', totalRbis.value)
 }
 
 const filterPlayerHR = computed(() => {
@@ -174,6 +181,7 @@ const filterPlayerHR = computed(() => {
 
 function countTotalHr(hr: { name: string; hr: number; number: number }[]) {
   totalHrs.value = hr.reduce((acc, cur) => acc + cur.hr, 0)
+  emits('totalHrs', totalHrs.value)
 }
 
 const filterPlayerAVG = computed(() => {

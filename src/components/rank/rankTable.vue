@@ -19,7 +19,11 @@
         </el-button>
       </template>
     </el-table-column>
-    <el-table-column :prop="props.rank" :label="rankName()" />
+    <el-table-column :prop="props.rank" :label="rankName()">
+      <template #default="{ row }">
+        {{ countRank(row) }}
+      </template>
+    </el-table-column>
   </el-table>
 </template>
 
@@ -67,6 +71,24 @@ function rankName() {
       return '打擊率'
     case 'sb':
       return '盜壘'
+  }
+}
+
+function countRank(row: {
+  hit: number
+  avg: number
+  rbi: number
+  hr: number
+  sb: number
+}) {
+  if (props.rank === 'avg') {
+    if (row.avg) {
+      return row.avg.toFixed(3)
+    } else {
+      return (0).toFixed(3)
+    }
+  } else {
+    return row[props.rank as keyof typeof row]
   }
 }
 </script>

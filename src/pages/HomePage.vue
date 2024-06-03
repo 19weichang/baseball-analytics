@@ -3,7 +3,7 @@
     <div class="block">
       <div class="blockTitle">球員列表</div>
       <el-tabs type="border-card" class="tabsCard">
-        <el-tab-pane label="打者">
+        <el-tab-pane label="球員">
           <el-row>
             <el-table
               class="homePageTable"
@@ -14,7 +14,13 @@
               style="width: 100%"
               empty-text="暫無數據"
             >
-              <el-table-column fixed prop="number" label="No" width="50" />
+              <el-table-column
+                fixed
+                prop="number"
+                label="No"
+                width="70"
+                sortable
+              />
               <el-table-column prop="name" label="球員" width="150">
                 <template #default="{ row }">
                   <el-button
@@ -38,16 +44,8 @@
               </el-table-column>
               <el-table-column prop="age" label="年齡" />
               <el-table-column prop="position" label="守備位置" />
-              <!-- <el-table-column prop="gradeIndex" label="總評" />
-              <el-table-column prop="hit" label="打擊" />
-              <el-table-column prop="speed" label="速度" />
-              <el-table-column prop="defense" label="守備" />
-              <el-table-column prop="arm" label="傳球" /> -->
             </el-table>
           </el-row>
-        </el-tab-pane>
-        <el-tab-pane label="投手">
-          <el-empty description="暫時無資料..." />
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -55,12 +53,34 @@
       <div class="blockTitle">排行榜</div>
       <el-tabs type="border-card" class="rankTabsCard">
         <el-tab-pane label="打擊">
+          <el-select
+            v-model="gameType"
+            placeholder="賽事類型"
+            size="small"
+            style="width: 80px"
+            @change="changeGameType"
+          >
+            <el-option
+              v-for="item in gameOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+          <HitterRank
+            :playersLeagueCareer="playersLeagueCareer"
+            :playerLength="playerLength"
+          />
           <PlayerRank
             :loading="loading"
             :playersLeagueCareer="playersLeagueCareer"
             :playerLength="playerLength"
             @handlePlayer="handlePlayer"
-        /></el-tab-pane>
+            @totalHits="handleTotalHits"
+            @totalRbis="handleTotalRbis"
+            @totalHrs="handleTotalHrs"
+          />
+        </el-tab-pane>
         <el-tab-pane label="投手">
           <el-empty description="暫時無資料..." />
         </el-tab-pane>
@@ -82,11 +102,12 @@
 import { ref } from 'vue'
 import { getPlayers, getPlayerHitter } from '../api/players/index'
 import { Player, PlayerCareer } from '../api/players/types'
+import { Game } from '@/api/games/types'
 import { useRouter } from 'vue-router'
 import { getGameByType } from '@/api/games/index'
 import StatisticalData from '@/components/statistical/statisticalData.vue'
 import PlayerRank from '@/components/rank/playerRank.vue'
-import { Game } from '@/api/games/types'
+import HitterRank from '@/components/rank/hitterRank.vue'
 
 const players = ref<Player[]>([])
 const playerLength = ref<number>(0)
@@ -99,6 +120,8 @@ const totalHrs = ref<number>(0)
 const thisYearLeagueGame = ref<Game[]>([])
 const nowYear = new Date().getFullYear().toString()
 const playersLeagueCareer = ref<PlayerCareer[]>([])
+const gameType = ref('seasonGame')
+const gameOptions = [{ value: 'seasonGame', label: '季賽' }]
 
 function fetchPlayerSheet() {
   loading.value = true
@@ -150,6 +173,22 @@ function handlePlayer(row: Player) {
       query: { name: row.name, number: row.number }
     })
   }
+}
+
+function handleTotalHits(n: number) {
+  totalHits.value = n
+}
+
+function handleTotalRbis(n: number) {
+  totalRbis.value = n
+}
+
+function handleTotalHrs(n: number) {
+  totalHrs.value = n
+}
+
+function changeGameType() {
+  console.log(gameType.value)
 }
 
 fetchPlayerSheet()
