@@ -15,7 +15,7 @@
               empty-text="暫無數據"
             >
               <el-table-column fixed prop="number" label="No" width="50" />
-              <el-table-column prop="name" label="姓名" width="100">
+              <el-table-column prop="name" label="球員" width="150">
                 <template #default="{ row }">
                   <el-button
                     class="playerNameBtn"
@@ -23,17 +23,26 @@
                     size="small"
                     @click="handlePlayer(row)"
                   >
+                    <img
+                      :src="
+                        row.img
+                          ? row.img
+                          : '/baseball-analytics/image/icon.jpeg'
+                      "
+                      alt="player"
+                      class="playerImg"
+                    />
                     {{ row.name }}
                   </el-button>
                 </template>
               </el-table-column>
               <el-table-column prop="age" label="年齡" />
               <el-table-column prop="position" label="守備位置" />
-              <el-table-column prop="gradeIndex" label="總評" />
+              <!-- <el-table-column prop="gradeIndex" label="總評" />
               <el-table-column prop="hit" label="打擊" />
               <el-table-column prop="speed" label="速度" />
               <el-table-column prop="defense" label="守備" />
-              <el-table-column prop="arm" label="傳球" />
+              <el-table-column prop="arm" label="傳球" /> -->
             </el-table>
           </el-row>
         </el-tab-pane>
@@ -253,6 +262,13 @@ fetchPlayerSheet()
       text-decoration: underline;
       color: #862633;
     }
+  }
+
+  .playerImg {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 1px solid black;
   }
 
   .OmegaIcon {
