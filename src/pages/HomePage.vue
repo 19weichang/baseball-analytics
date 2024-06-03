@@ -269,6 +269,7 @@ fetchPlayerSheet()
     height: 25px;
     border-radius: 50%;
     border: 1px solid black;
+    margin: 0px 6px;
   }
 
   .OmegaIcon {

@@ -91,38 +91,57 @@
       </el-tabs>
     </el-card>
     <el-card v-loading="loading">
-      <div class="hitChart">
-        <div class="hitChartTool">
-          <div class="hitChartTitle">打擊指數</div>
-          <el-select
-            v-model="gameLength"
-            placeholder="比賽場數"
-            size="small"
-            style="width: 80px"
-          >
-            <el-option
-              v-for="item in gameLengthOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </div>
-        <div>
-          <HitAdvanced :games="games" :gameLength="gameLength" />
-        </div>
-      </div>
-    </el-card>
-    <el-card v-loading="loading">
-      <div class="hitChart">
-        <div class="hitChartTool">
-          <div class="hitChartTitle">打擊表現</div>
-          <div></div>
-        </div>
-        <div>
-          <PerformanceChart :games="games" :gameLength="gameLength" />
-        </div>
-      </div>
+      <el-tabs type="border-card">
+        <el-tab-pane label="打擊數據">
+          <div class="hitChart">
+            <div class="hitChartTool">
+              <div class="hitChartTitle">打擊指數</div>
+              <el-select
+                v-model="gameLength"
+                placeholder="比賽場數"
+                size="small"
+                style="width: 80px"
+              >
+                <el-option
+                  v-for="item in gameLengthOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </div>
+            <div>
+              <HitAdvanced :games="games" :gameLength="gameLength" />
+            </div>
+          </div>
+          <div class="hitChart">
+            <div class="hitChartTool">
+              <div class="hitChartTitle">打擊表現</div>
+              <div>
+                <el-select
+                  v-model="gameLength"
+                  placeholder="比賽場數"
+                  size="small"
+                  style="width: 80px"
+                >
+                  <el-option
+                    v-for="item in gameLengthOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+              </div>
+            </div>
+            <div>
+              <PerformanceChart :games="games" :gameLength="gameLength" />
+            </div>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="投球數據">
+          <el-empty description="暫時無資料..." />
+        </el-tab-pane>
+      </el-tabs>
     </el-card>
   </div>
 </template>
