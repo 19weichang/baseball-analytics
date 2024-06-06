@@ -71,6 +71,10 @@
             :playersLeagueCareer="playersLeagueCareer"
             :playerLength="playerLength"
           />
+          <HitterChart
+            :playersLeagueCareer="playersLeagueCareer"
+            :playerLength="playerLength"
+          />
           <PlayerRank
             :loading="loading"
             :playersLeagueCareer="playersLeagueCareer"
@@ -108,6 +112,7 @@ import { getGameByType } from '@/api/games/index'
 import StatisticalData from '@/components/statistical/statisticalData.vue'
 import PlayerRank from '@/components/rank/playerRank.vue'
 import HitterRank from '@/components/rank/hitterRank.vue'
+import HitterChart from '@/components/rank/hitterChart.vue'
 
 const players = ref<Player[]>([])
 const playerLength = ref<number>(0)
@@ -122,7 +127,6 @@ const nowYear = new Date().getFullYear().toString()
 const playersLeagueCareer = ref<PlayerCareer[]>([])
 const gameType = ref('seasonGame')
 const gameOptions = [{ value: 'seasonGame', label: '季賽' }]
-
 function fetchPlayerSheet() {
   loading.value = true
   getPlayers()
