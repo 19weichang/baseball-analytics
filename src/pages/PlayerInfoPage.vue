@@ -145,7 +145,51 @@
           </div>
         </el-tab-pane>
         <el-tab-pane label="投球數據">
-          <el-empty description="暫時無資料..." />
+          <div class="pitcherChart">
+            <div class="pitcherChartTool">
+              <div class="pitcherChartTitle">投球表現</div>
+              <el-select
+                v-model="pitcherGameLength"
+                placeholder="比賽場數"
+                size="small"
+                style="width: 80px"
+              >
+                <el-option
+                  v-for="item in pitcherGameLengthOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </div>
+            <div>
+              <PitcherAdvanced :games="games" :gameLength="pitcherGameLength" />
+            </div>
+          </div>
+          <div class="pitcherChart">
+            <div class="pitcherChartTool">
+              <div class="pitcherChartTitle">投球表現</div>
+              <el-select
+                v-model="pitcherGameLength"
+                placeholder="比賽場數"
+                size="small"
+                style="width: 80px"
+              >
+                <el-option
+                  v-for="item in pitcherGameLengthOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </div>
+            <div>
+              <PitcherPerformanceChart
+                :games="games"
+                :gameLength="pitcherGameLength"
+              />
+            </div>
+          </div>
         </el-tab-pane>
       </el-tabs>
     </el-card>
@@ -159,6 +203,8 @@ import BattleGame from '@/components/battle/battleGame.vue'
 import HitAdvanced from '@/components/advanced/hitAdvanced.vue'
 import PerformanceChart from '@/components/advanced/performanceChart.vue'
 import PitcherTable from '@/components/playerInfo/pitcherTable.vue'
+import PitcherAdvanced from '@/components/advanced/pitcherAdvanced.vue'
+import PitcherPerformanceChart from '@/components/advanced/pitcherPerformanceChart.vue'
 import { TableColumnCtx } from 'element-plus'
 import { useRouteQuery } from '@vueuse/router'
 import { getGame } from '@/api/games/index'
@@ -296,6 +342,13 @@ const gameLengthOptions = [
   { value: '10', label: '近十場' },
   { value: 'all', label: '全部' }
 ]
+
+const pitcherGameLength = ref('5')
+const pitcherGameLengthOptions = [
+  { value: '5', label: '近五場' },
+  { value: '10', label: '近十場' },
+  { value: 'all', label: '全部' }
+]
 </script>
 
 <style scoped>
@@ -322,6 +375,27 @@ const gameLengthOptions = [
 }
 
 .hitChartTitle {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: white;
+}
+
+.pitcherChart {
+  background-color: #b15560;
+  padding: 20px;
+}
+
+.pitcherChartTool {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  background-color: #862633;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.pitcherChartTitle {
   font-size: 1.1rem;
   font-weight: 500;
   color: white;
