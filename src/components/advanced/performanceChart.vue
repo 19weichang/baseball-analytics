@@ -117,7 +117,7 @@ const performance = ref({
       '#ff5809',
       '#9F35FF',
       '#FFD700',
-      '#00DB00',
+      '#00A600',
       '#FF00FF'
     ]
   }

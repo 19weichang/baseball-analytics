@@ -82,7 +82,7 @@ const pitcherPerformanceChart = ref({
         }
       }
     ],
-    colors: ['#00DB00', '#0072e3', '#CE0000']
+    colors: ['#00A600', '#0072e3', '#CE0000']
   }
 })
 </script>

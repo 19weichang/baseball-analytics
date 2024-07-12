@@ -66,49 +66,6 @@ const pitcher = ref({
       data: [0]
     }
   ],
-  //   chartOptions: {
-  //     chart: {
-  //       type: 'bar',
-  //       height: 350,
-  //       toolbar: {
-  //         show: false
-  //       }
-  //     },
-  //     plotOptions: {
-  //       bar: {
-  //         horizontal: false,
-  //         columnWidth: '40%',
-  //         endingShape: 'rounded'
-  //       }
-  //     },
-  //     dataLabels: {
-  //       enabled: false
-  //     },
-  //     stroke: {
-  //       show: true,
-  //       width: 2,
-  //       colors: ['transparent']
-  //     },
-  //     xaxis: {
-  //       categories: []
-  //     },
-  //     yaxis: {
-  //       title: {
-  //         text: '$ (thousands)'
-  //       }
-  //     },
-  //     fill: {
-  //       opacity: 1
-  //     },
-  //     tooltip: {
-  //       y: {
-  //         formatter: function (val: number) {
-  //           return '$ ' + val + ' thousands'
-  //         }
-  //       }
-  //     },
-  //     colors: ['#0072e3', '#CE0000', '#00DB00']
-  //   }
   chartOptions: {
     chart: {
       type: 'bar',
@@ -153,7 +110,7 @@ const pitcher = ref({
         text: undefined
       }
     },
-    colors: ['#CE0000', '#00DB00'],
+    colors: ['#CE0000', '#00A600'],
     tooltip: {
       y: {
         formatter: function (val: number) {
