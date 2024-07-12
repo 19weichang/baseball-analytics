@@ -104,7 +104,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { getPlayers, getPlayerHitter } from '../api/players/index'
+import { getPlayers } from '../api/players/index'
 import { Player, PlayerCareer } from '../api/players/types'
 import { Game } from '@/api/games/types'
 import { useRouter } from 'vue-router'
@@ -117,7 +117,6 @@ import HitterChart from '@/components/rank/hitterChart.vue'
 const players = ref<Player[]>([])
 const playerLength = ref<number>(0)
 const loading = ref<boolean>(false)
-const playersCareer = ref<PlayerCareer[]>([])
 const router = useRouter()
 const totalHits = ref<number>(0)
 const totalRbis = ref<number>(0)
@@ -146,16 +145,68 @@ function fetchPlayerSheet() {
 async function fetchPlayersCareer(players: Player[]) {
   players.forEach((player) => {
     const sheetName = `${player.name}${player.number}`
-    getPlayerHitter(sheetName)
-      .then((data) => {
-        playersCareer.value.push(Object.assign(player, { hitter: data }))
-      })
-      .catch((err) => {
-        console.log(err)
-      })
     getGameByType(sheetName, '季賽')
       .then((data) => {
-        playersLeagueCareer.value.push(Object.assign(player, { hitter: data }))
+        let hitter = data.map((item) => {
+          return {
+            season: item.season,
+            PA: item.PA,
+            AB: item.AB,
+            SingleB: item.SingleB,
+            DoubleB: item.DoubleB,
+            TripleB: item.TripleB,
+            HR: item.HR,
+            RBI: item.RBI,
+            R: item.R,
+            BB: item.BB,
+            SO: item.SO,
+            GO: item.GO,
+            AO: item.AO,
+            SF: item.SF,
+            SH: item.SH,
+            ERRCH: item.ERRCH,
+            HBP: item.HBP,
+            AVG: item.AVG,
+            OBP: item.OBP,
+            SLG: item.SLG,
+            OPS: item.OPS,
+            SB: item.SB,
+            CS: item.CS,
+            SBP: item.SBP,
+            E: item.E
+          }
+        })
+        let pitcher = data.map((item) => {
+          return {
+            season: item.season,
+            W: item.W,
+            L: item.L,
+            S: item.S,
+            HLD: item.HLD,
+            PC: item.PC,
+            IP: item.IP,
+            K: item.K,
+            strike: item.strike,
+            ball: item.ball,
+            BBPitcher: item.BBPitcher,
+            hits: item.hits,
+            ER: item.ER,
+            RA: item.RA,
+            PE: item.PE,
+            BS: item.BS,
+            K9: item.K9,
+            KBB: item.KBB,
+            PIP: item.PIP,
+            R9: item.R9,
+            BB9: item.BB9,
+            OBA: item.OBA,
+            WHIP: item.WHIP,
+            ERA: item.ERA
+          }
+        })
+        playersLeagueCareer.value.push(
+          Object.assign(player, { hitter: hitter, pitcher: pitcher })
+        )
         thisYearLeagueSeason(data)
       })
       .catch((err) => {

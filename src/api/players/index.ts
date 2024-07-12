@@ -1,7 +1,14 @@
 // import { read } from '../../utils/xlsx'
 import * as xlsx from 'xlsx'
 import { readWorkbookFromRemoteFile } from '../../utils/xlsx'
-import { Player, PlayerEnglish, Hitter, HitterEnglish } from './types'
+import {
+  Player,
+  PlayerEnglish,
+  Hitter,
+  HitterEnglish,
+  Pitcher,
+  PitcherEnglish
+} from './types'
 import { utils } from 'xlsx'
 
 const key = import.meta.env.VITE_GOOGLE_API_KEY
@@ -245,6 +252,229 @@ function transformHitterEnglish(hitters: Hitter[]) {
   return hitter
 }
 
+export async function getPlayerPitcher(player: string) {
+  const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=xlsx`
+  const file = new Promise((resolve) => {
+    const callback = (workbook: xlsx.WorkBook) => {
+      const sheet = workbook.Sheets[player]
+      const json = utils.sheet_to_json(sheet)
+      resolve(json)
+    }
+    readWorkbookFromRemoteFile(sheetUrl, callback)
+  })
+  const Info: Pitcher[] = (await file) as Pitcher[]
+  // const gameLength = getPitcherGameLength(Info)
+  const playerInfo = transformPitcherEnglish(Info) as Pitcher[]
+  const gameLength = getPitcherGameLength(playerInfo)
+  const result: Pitcher[] = []
+  for (const key in playerInfo) {
+    const item = playerInfo[key]
+    const season = item.season
+    const pitcherGameLength = gameLength
+    const W = item.W
+    const L = item.L
+    const S = item.S
+    const HLD = item.HLD
+    const PC = item.PC
+    const IP = item.IP
+    const K = item.K
+    const strike = item.strike
+    const ball = item.ball
+    const BBPitcher = item.BBPitcher
+    const hits = item.hits
+    const ER = item.ER
+    const RA = item.RA
+    const PE = item.PE
+    const BS = item.BS
+    // const K9 = item.K9
+    // const KBB = item.KBB
+    // const PIP = item.PIP
+    // const R9 = item.R9
+    // const BB9 = item.BB9
+    // const OBA = item.OBA
+    // const WHIP = item.WHIP
+    // const ERA = item.ERA
+
+    if (!result[parseInt(season)]) {
+      result[parseInt(season)] = {
+        season: '',
+        pitcherGameLength: 0,
+        W: 0,
+        L: 0,
+        S: 0,
+        HLD: 0,
+        PC: 0,
+        IP: 0,
+        K: 0,
+        strike: 0,
+        ball: 0,
+        BBPitcher: 0,
+        hits: 0,
+        ER: 0,
+        RA: 0,
+        PE: 0,
+        BS: 0,
+        K9: 0,
+        KBB: 0,
+        PIP: 0,
+        R9: 0,
+        BB9: 0,
+        OBA: 0,
+        WHIP: 0,
+        ERA: 0
+      }
+    }
+
+    result[parseInt(season)].pitcherGameLength = pitcherGameLength
+    result[parseInt(season)].W += W
+    result[parseInt(season)].L += L
+    result[parseInt(season)].S += S
+    result[parseInt(season)].HLD += HLD
+    result[parseInt(season)].PC += PC || 0
+    result[parseInt(season)].IP += peopleToIP(IPToPeopleCount(IP))
+    result[parseInt(season)].K += K
+    result[parseInt(season)].strike += strike
+    result[parseInt(season)].ball += ball
+    result[parseInt(season)].BBPitcher += BBPitcher
+    result[parseInt(season)].hits += hits
+    result[parseInt(season)].ER += ER
+    result[parseInt(season)].RA += RA
+    result[parseInt(season)].PE += PE
+    result[parseInt(season)].BS += BS
+    result[parseInt(season)].K9 =
+      (K * 9) / peopleToIP(IPToPeopleCount(IP)) / gameLength
+    result[parseInt(season)].KBB =
+      K / BBPitcher / gameLength === Infinity ? 999 : K / BBPitcher
+    result[parseInt(season)].PIP =
+      PC / peopleToIP(IPToPeopleCount(IP)) / gameLength
+    result[parseInt(season)].R9 =
+      (RA * 9) / peopleToIP(IPToPeopleCount(IP)) / gameLength
+    result[parseInt(season)].BB9 =
+      (BBPitcher * 9) / peopleToIP(IPToPeopleCount(IP)) / gameLength
+    result[parseInt(season)].OBA =
+      (hits + BBPitcher) / (IPToPeopleCount(IP) + BBPitcher)
+    result[parseInt(season)].WHIP =
+      (hits + BBPitcher) / peopleToIP(IPToPeopleCount(IP)) / gameLength
+    result[parseInt(season)].ERA =
+      ERAfunc(result[parseInt(season)].ER, peopleToIP(IPToPeopleCount(IP))) /
+      gameLength
+  }
+
+  const careerArray = Object.entries(result).map(
+    ([
+      season,
+      {
+        pitcherGameLength,
+        W,
+        L,
+        S,
+        HLD,
+        PC,
+        IP,
+        K,
+        strike,
+        ball,
+        BBPitcher,
+        hits,
+        ER,
+        RA,
+        PE,
+        BS,
+        K9,
+        KBB,
+        PIP,
+        R9,
+        BB9,
+        OBA,
+        WHIP,
+        ERA
+      }
+    ]) => ({
+      season,
+      pitcherGameLength,
+      W,
+      L,
+      S,
+      HLD,
+      PC,
+      IP,
+      K,
+      strike,
+      ball,
+      BBPitcher,
+      hits,
+      ER,
+      RA,
+      PE,
+      BS,
+      K9,
+      KBB,
+      PIP,
+      R9,
+      BB9,
+      OBA,
+      WHIP,
+      ERA
+    })
+  )
+
+  const arr = careerArray.map((item) => ({
+    ...item,
+    season: item.season
+  }))
+
+  return arr
+}
+
+function transformPitcherEnglish(pitchers: Pitcher[]) {
+  const pitcher = pitchers.map((item) => {
+    const obj = {}
+    const keys = Object.keys(PitcherEnglish)
+    keys.forEach((key) => {
+      if (isVaildKey(key, PitcherEnglish)) {
+        const en = PitcherEnglish[key]
+        obj[en] = item[key]
+      }
+    })
+    return obj
+  })
+
+  return pitcher
+}
+
+function IPToPeopleCount(IP: number) {
+  let totalPeople = 0
+  const intPart = Math.floor(IP)
+  const decimalPart = IP - intPart
+  totalPeople += intPart * 3
+  if (decimalPart > 0.2) {
+    totalPeople += 3
+  } else {
+    totalPeople += decimalPart / 0.1
+  }
+
+  return totalPeople
+}
+
+function peopleToIP(people: number) {
+  const intPart = Math.floor(people / 3)
+  const decimalPart = people % 3
+  return intPart + decimalPart * 0.1
+}
+
+function ERAfunc(ER: number, IP: number) {
+  return (ER % IP) * 9
+}
+
+function getPitcherGameLength(pitcher: Pitcher[]) {
+  let length = 0
+  pitcher.forEach((item) => {
+    if (item.position === 'P') {
+      length++
+    }
+  })
+  return length
+}
 // export function getplayer(sheetId: string, player: string) {
 //   const sheetUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${player}?key=${key}`
 //   return fetch(sheetUrl).then((res) => res.json())

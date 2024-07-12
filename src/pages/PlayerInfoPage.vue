@@ -34,7 +34,7 @@
         </el-col>
       </el-row>
       <el-tabs type="border-card">
-        <el-tab-pane label="生涯數據">
+        <el-tab-pane label="生涯打擊數據">
           <div v-if="player?.hitter">
             <el-table
               :data="player?.hitter"
@@ -82,6 +82,12 @@
               <el-table-column prop="OPS" label="OPS" :formatter="rounding" />
               <el-table-column prop="E" label="守備失誤" />
             </el-table>
+          </div>
+          <div v-else>暫無選手資料</div>
+        </el-tab-pane>
+        <el-tab-pane label="生涯投球數據">
+          <div v-if="player?.pitcher">
+            <PitcherTable :pitcher="player.pitcher" />
           </div>
           <div v-else>暫無選手資料</div>
         </el-tab-pane>
@@ -148,21 +154,25 @@
 
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
-import { Hitter, Player, PlayerCareer } from '@/api/players/types'
+import { Hitter, Player } from '@/api/players/types'
 import BattleGame from '@/components/battle/battleGame.vue'
 import HitAdvanced from '@/components/advanced/hitAdvanced.vue'
 import PerformanceChart from '@/components/advanced/performanceChart.vue'
+import PitcherTable from '@/components/playerInfo/pitcherTable.vue'
 import { TableColumnCtx } from 'element-plus'
 import { useRouteQuery } from '@vueuse/router'
 import { getGame } from '@/api/games/index'
 import { Game } from '@/api/games/types'
-import { getPlayer, getPlayerHitter } from '@/api/players/index'
+import {
+  getPlayer,
+  getPlayerHitter,
+  getPlayerPitcher
+} from '@/api/players/index'
 
 const playerName = useRouteQuery('name')
 const playerNumber = useRouteQuery('number')
 const games = ref<Game[]>([])
 const player = ref<Player | undefined>()
-const playersCareer = ref<PlayerCareer[]>([])
 const loading = ref<boolean>(false)
 
 if (playerNumber.value || playerName.value) {
@@ -193,13 +203,22 @@ async function fetchPlayer(playerName: string, playerNumber: number) {
   await getPlayerHitter(sheetName)
     .then((data) => {
       if (player.value) {
-        playersCareer.value.push(Object.assign(player.value, { hitter: data }))
+        Object.assign(player.value, { hitter: data })
       }
     })
     .catch((err) => {
       console.log(err)
     })
 
+  await getPlayerPitcher(sheetName)
+    .then((data) => {
+      if (player.value) {
+        Object.assign(player.value, { pitcher: data })
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+    })
   loading.value = false
 }
 

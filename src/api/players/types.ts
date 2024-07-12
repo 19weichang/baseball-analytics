@@ -93,7 +93,30 @@ export enum PlayerEnglish {
   '盜壘' = 'SB',
   '盜壘失敗' = 'CS',
   '盜壘成功率' = 'SBP',
-  '守備失誤' = 'E'
+  '守備失誤' = 'E',
+  '勝投' = 'W',
+  '敗投' = 'L',
+  '救援' = 'S',
+  '中繼' = 'HLD',
+  '球數' = 'PC',
+  '投球局數' = 'IP',
+  '三振打者' = 'K',
+  '好球' = 'strike',
+  '壞球' = 'ball',
+  '保送打者' = 'BBPitcher',
+  '被安打' = 'hits',
+  '自責分' = 'ER',
+  '失分' = 'RA',
+  '投手守備失誤' = 'PE',
+  '救援失敗' = 'BS',
+  '9局平均三振' = 'K9',
+  '三振保送比' = 'KBB',
+  '每局投球數' = 'PIP',
+  '9局平均失分' = 'R9',
+  '9局平均保送' = 'BB9',
+  '被上壘率' = 'OBA',
+  '每局被上壘率' = 'WHIP',
+  '防禦率' = 'ERA'
 }
 
 export interface Player {
@@ -140,6 +163,7 @@ export interface Player {
   // TA: number // 攻擊指數
   // ERRCH: number // 失誤上壘
   hitter: Hitter
+  pitcher: Pitcher
 }
 
 export function emptyPlayer(): Player {
@@ -186,7 +210,8 @@ export function emptyPlayer(): Player {
     // SH: 0,
     // TA: 0,
     // ERRCH: 0
-    hitter: emptyHitter()
+    hitter: emptyHitter(),
+    pitcher: emptyPitcher()
   }
 }
 
@@ -195,6 +220,7 @@ export interface PlayerCareer {
   number: number
   img: string
   hitter: Hitter
+  pitcher: Pitcher
 }
 
 export function emptyPlayerCareer(): PlayerCareer {
@@ -202,7 +228,8 @@ export function emptyPlayerCareer(): PlayerCareer {
     name: '',
     number: 0,
     img: '',
-    hitter: emptyHitter()
+    hitter: emptyHitter(),
+    pitcher: emptyPitcher()
   }
 }
 
@@ -318,4 +345,92 @@ export function emptyHitter(): Hitter {
     SBP: 0,
     E: 0
   }
+}
+
+export interface Pitcher {
+  position?: string // 守備位置
+  season: string // 年度
+  pitcherGameLength: number // 投手出賽場數
+  W: number // 勝場
+  L: number // 敗場
+  S: number // 救援
+  HLD: number // 中繼
+  PC: number // 球數
+  IP: number // 投球局數
+  K: number // 三振打者
+  strike: number // 好球
+  ball: number // 壞球
+  BBPitcher: number // 保送打者
+  hits: number // 被安打
+  ER: number // 自責分
+  RA: number // 失分
+  PE: number // 投手守備失誤
+  BS: number // 救援失敗
+  K9: number // 9局平均三振
+  KBB: number // 三振保送比
+  PIP: number // 每局投球數
+  R9: number // 9局平均失分
+  BB9: number // 9局平均保送
+  OBA: number // 被上壘率
+  WHIP: number // 每局被上壘率
+  ERA: number // 防禦率
+}
+
+export function emptyPitcher(): Pitcher {
+  return {
+    position: '',
+    season: '',
+    pitcherGameLength: 0,
+    W: 0,
+    L: 0,
+    S: 0,
+    HLD: 0,
+    PC: 0,
+    IP: 0,
+    K: 0,
+    strike: 0,
+    ball: 0,
+    BBPitcher: 0,
+    hits: 0,
+    ER: 0,
+    RA: 0,
+    PE: 0,
+    BS: 0,
+    K9: 0,
+    KBB: 0,
+    PIP: 0,
+    R9: 0,
+    BB9: 0,
+    OBA: 0,
+    WHIP: 0,
+    ERA: 0
+  }
+}
+
+export enum PitcherEnglish {
+  '守備位置' = 'position',
+  '年度' = 'season',
+  '勝投' = 'W',
+  '敗投' = 'L',
+  '救援' = 'S',
+  '中繼' = 'HLD',
+  '球數' = 'PC',
+  '投球局數' = 'IP',
+  '三振打者' = 'K',
+  '好球' = 'strike',
+  '壞球' = 'ball',
+  '保送打者' = 'BBPitcher',
+  '被安打' = 'hits',
+  '自責分' = 'ER',
+  '失分' = 'RA',
+  '投手守備失誤' = 'PE',
+  '救援失敗' = 'BS',
+  '9局平均三振' = 'K9',
+  '三振保送比' = 'KBB',
+  '每局投球數' = 'PIP',
+  '9局平均失分' = 'R9',
+  '9局平均保送' = 'BB9',
+  '被上壘率' = 'OBA',
+  '每局被上壘率' = 'WHIP',
+  '防禦率' = 'ERA'
 }

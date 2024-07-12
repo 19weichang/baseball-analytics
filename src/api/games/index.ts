@@ -58,6 +58,18 @@ export async function getGameByType(player: string, type: string) {
   const typeGame = game.filter((item) => item.gameType === type)
   for (let i = 0; i < typeGame.length; i++) {
     typeGame[i].season = typeGame[i].season.toString()
+    typeGame[i].K9 = (typeGame[i].K * 9) / typeGame[i].IP
+    typeGame[i].KBB =
+      typeGame[i].K / typeGame[i].BBPitcher === Infinity
+        ? 999
+        : typeGame[i].K / typeGame[i].BBPitcher
+    typeGame[i].PIP = typeGame[i].PC / typeGame[i].IP
+    typeGame[i].R9 = (typeGame[i].RA * 9) / typeGame[i].IP
+    typeGame[i].BB9 = (typeGame[i].BBPitcher * 9) / typeGame[i].IP
+    typeGame[i].OBA = 0
+    typeGame[i].WHIP =
+      (typeGame[i].hits + typeGame[i].BBPitcher) / typeGame[i].IP
+    typeGame[i].ERA = (typeGame[i].ER * 9) / typeGame[i].IP
   }
   return typeGame
 }
