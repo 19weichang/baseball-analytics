@@ -342,21 +342,31 @@ export async function getPlayerPitcher(player: string) {
     result[parseInt(season)].PE += PE
     result[parseInt(season)].BS += BS
     result[parseInt(season)].K9 =
-      (K * 9) / peopleToIP(IPToPeopleCount(IP)) / gameLength
+      (result[parseInt(season)].K * 9) /
+      result[parseInt(season)].IP /
+      gameLength
     result[parseInt(season)].KBB =
-      K / BBPitcher / gameLength === Infinity ? 999 : K / BBPitcher
-    result[parseInt(season)].PIP =
-      PC / peopleToIP(IPToPeopleCount(IP)) / gameLength
+      result[parseInt(season)].K /
+        result[parseInt(season)].BBPitcher /
+        gameLength ===
+      Infinity
+        ? 999
+        : result[parseInt(season)].K / result[parseInt(season)].BBPitcher
+    result[parseInt(season)].PIP = PC / result[parseInt(season)].IP / gameLength
     result[parseInt(season)].R9 =
-      (RA * 9) / peopleToIP(IPToPeopleCount(IP)) / gameLength
+      (result[parseInt(season)].RA * 9) /
+      result[parseInt(season)].IP /
+      gameLength
     result[parseInt(season)].BB9 =
-      (BBPitcher * 9) / peopleToIP(IPToPeopleCount(IP)) / gameLength
+      (result[parseInt(season)].BBPitcher * 9) /
+      result[parseInt(season)].IP /
+      gameLength
     result[parseInt(season)].OBA =
       (hits + BBPitcher) / (IPToPeopleCount(IP) + BBPitcher)
     result[parseInt(season)].WHIP =
-      (hits + BBPitcher) / peopleToIP(IPToPeopleCount(IP)) / gameLength
+      (hits + BBPitcher) / result[parseInt(season)].IP / gameLength
     result[parseInt(season)].ERA =
-      ERAfunc(result[parseInt(season)].ER, peopleToIP(IPToPeopleCount(IP))) /
+      ERAfunc(result[parseInt(season)].ER, result[parseInt(season)].IP) /
       gameLength
   }
 
