@@ -1,6 +1,6 @@
 import {
   createRouter as createVueRouter,
-  createWebHistory,
+  createWebHashHistory,
   RouteRecordRaw
 } from 'vue-router'
 
@@ -27,7 +27,7 @@ const routes: RouteRecordRaw[] = [
 
 export function createRouter() {
   return createVueRouter({
-    history: createWebHistory(),
+    history: createWebHashHistory(),
     routes
   })
 }
