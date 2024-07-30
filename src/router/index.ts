@@ -6,13 +6,13 @@ import {
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/baseball-analytics/',
+    path: '/',
     name: 'HomePage',
     component: () => import('@/pages/HomePage.vue'),
     meta: { title: '首頁' }
   },
   {
-    path: '/baseball-analytics/playerInfo',
+    path: '/playerInfo',
     name: 'PlayerInfoPage',
     component: () => import('@/pages/PlayerInfoPage.vue'),
     meta: { title: '球員資訊' }
