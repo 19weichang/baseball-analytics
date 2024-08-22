@@ -10,9 +10,14 @@
   >
     <el-table-column fixed prop="number" label="No" width="70" sortable />
     <el-table-column prop="name" label="球員" width="100" />
-    <el-table-column prop="hitter" label="AVG">
+    <el-table-column prop="hitter" label="AVG" sortable>
       <template #default="{ row }">
         {{ getPlayerAVG(row.hitter) }}
+      </template>
+    </el-table-column>
+    <el-table-column prop="hitter" label="OPS">
+      <template #default="{ row }">
+        {{ getPlayerOPS(row.hitter) }}
       </template>
     </el-table-column>
   </el-table>
@@ -35,6 +40,20 @@ function getPlayerAVG(hitter: Hitter[] | undefined) {
       return (0).toFixed(3)
     } else {
       return avg
+    }
+  } else {
+    return 0
+  }
+}
+
+function getPlayerOPS(hitter: Hitter[] | undefined) {
+  if (Array.isArray(hitter)) {
+    const playerTotalOPS = hitter.reduce((acc, cur) => acc + cur.OPS, 0)
+    const ops = (playerTotalOPS / hitter.length).toFixed(3)
+    if (ops === 'NaN') {
+      return (0).toFixed(3)
+    } else {
+      return ops
     }
   } else {
     return 0

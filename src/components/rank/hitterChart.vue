@@ -18,25 +18,49 @@ import { Hitter, PlayerCareer } from '../../api/players/types'
 const props = defineProps<{
   playersLeagueCareer: PlayerCareer[]
   playerLength: number
+  chartType: string
 }>()
 
 const playersImg = ref<string[]>([])
 
 const series = computed(() => {
   if (props.playersLeagueCareer.length === props.playerLength) {
-    return props.playersLeagueCareer.map((player) => {
-      const avg = getPlayerAVG(player.hitter)
-      const pa = getPlayerPA(player.hitter)
-      getPlayerImage(player)
-      return {
-        name: player.name,
-        data: [[pa, avg]]
-      }
-    })
+    switch (props.chartType) {
+      case 'AVG':
+        return getAVGSeries()
+      case 'OPS':
+        return getOPSSeries()
+      default:
+        return []
+    }
   } else {
     return []
   }
 })
+
+function getAVGSeries() {
+  return props.playersLeagueCareer.map((player) => {
+    const avg = getPlayerAVG(player.hitter)
+    const pa = getPlayerPA(player.hitter)
+    getPlayerImage(player)
+    return {
+      name: player.name,
+      data: [[pa, avg]]
+    }
+  })
+}
+
+function getOPSSeries() {
+  return props.playersLeagueCareer.map((player) => {
+    const ops = getPlayerOPS(player.hitter)
+    const pa = getPlayerPA(player.hitter)
+    getPlayerImage(player)
+    return {
+      name: player.name,
+      data: [[pa, ops]]
+    }
+  })
+}
 
 function getPlayerImage(player: PlayerCareer) {
   if (player.img) {
@@ -56,6 +80,20 @@ function getPlayerAVG(hitter: Hitter | undefined) {
       return (0).toFixed(3)
     } else {
       return avg
+    }
+  } else {
+    return 0
+  }
+}
+
+function getPlayerOPS(hitter: Hitter | undefined) {
+  if (Array.isArray(hitter)) {
+    const playerTotalOPS = hitter.reduce((acc, cur) => acc + cur.OPS, 0)
+    const ops = (playerTotalOPS / hitter.length).toFixed(3)
+    if (ops === 'NaN') {
+      return (0).toFixed(3)
+    } else {
+      return ops
     }
   } else {
     return 0

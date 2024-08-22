@@ -42,20 +42,35 @@
       <div class="blockTitle">排行榜</div>
       <el-tabs type="border-card" class="rankTabsCard">
         <el-tab-pane label="打擊">
-          <el-select
-            v-model="gameType"
-            placeholder="賽事類型"
-            size="small"
-            style="width: 80px"
-            @change="changeGameType"
-          >
-            <el-option
-              v-for="item in gameOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
+          <div class="selectGroup">
+            <el-select
+              v-model="gameType"
+              placeholder="賽事類型"
+              size="small"
+              style="width: 80px"
+              @change="changeGameType"
+            >
+              <el-option
+                v-for="item in gameOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+            <el-select
+              v-model="chartType"
+              placeholder="數據類型"
+              size="small"
+              style="width: 80px"
+            >
+              <el-option
+                v-for="item in chartOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </div>
           <HitterRank
             :playersLeagueCareer="playersLeagueCareer"
             :playerLength="playerLength"
@@ -63,6 +78,7 @@
           <HitterChart
             :playersLeagueCareer="playersLeagueCareer"
             :playerLength="playerLength"
+            :chartType="chartType"
           />
           <PlayerRank
             :loading="loading"
@@ -114,7 +130,18 @@ const thisYearLeagueGame = ref<Game[]>([])
 const nowYear = new Date().getFullYear().toString()
 const playersLeagueCareer = ref<PlayerCareer[]>([])
 const gameType = ref('seasonGame')
+const chartType = ref('AVG')
 const gameOptions = [{ value: 'seasonGame', label: '季賽' }]
+const chartOptions = [
+  {
+    value: 'AVG',
+    label: '打擊率'
+  },
+  {
+    value: 'OPS',
+    label: 'OPS'
+  }
+]
 function fetchPlayerSheet() {
   loading.value = true
   getPlayers()
@@ -285,6 +312,11 @@ fetchPlayerSheet()
   .rankTabsCard:deep .el-tabs__header .is-active {
     background-color: #b15560 !important;
     color: white !important;
+  }
+
+  .selectGroup {
+    display: flex;
+    justify-content: space-between;
   }
 
   .block {
