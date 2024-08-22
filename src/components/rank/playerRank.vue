@@ -41,46 +41,158 @@
     </el-collapse-item>
     <el-collapse-item title="打點 Top5" name="2">
       <el-card class="rankCard">
-        <RankTable
-          :rank="'rbi'"
-          :loading="loading"
-          :rankLoading="rankLoading"
-          :filterData="filterPlayerRBI"
-          @handlePlayer="emits('handlePlayer', $event)"
-        />
+        <el-row>
+          <el-col :md="8">
+            <el-card v-loading="rankLoading || loading" class="playerCard">
+              <div class="playerCardBox">
+                <img
+                  class="playerCardImg"
+                  :src="
+                    filterPlayerRBI[0]?.image
+                      ? filterPlayerRBI[0]?.image
+                      : '/baseball-analytics/image/emptyPlayer.png'
+                  "
+                />
+                <div class="playerCardText">
+                  <div class="playerCardTitle">
+                    {{
+                      `${filterPlayerRBI[0]?.name} #${filterPlayerRBI[0]?.number}`
+                    }}
+                  </div>
+                  <div class="playerCardInfo">
+                    {{ `目前打點: ${filterPlayerRBI[0]?.rbi}` }}
+                  </div>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+          <el-col :md="16">
+            <RankTable
+              :rank="'rbi'"
+              :loading="loading"
+              :rankLoading="rankLoading"
+              :filterData="filterPlayerRBI"
+              @handlePlayer="emits('handlePlayer', $event)"
+            />
+          </el-col>
+        </el-row>
       </el-card>
     </el-collapse-item>
     <el-collapse-item title="全壘打 Top5" name="3">
       <el-card class="rankCard">
-        <RankTable
-          :rank="'hr'"
-          :loading="loading"
-          :rankLoading="rankLoading"
-          :filterData="filterPlayerHR"
-          @handlePlayer="emits('handlePlayer', $event)"
-        />
+        <el-row>
+          <el-col :md="8">
+            <el-card v-loading="rankLoading || loading" class="playerCard">
+              <div class="playerCardBox">
+                <img
+                  class="playerCardImg"
+                  :src="
+                    filterPlayerHR[0]?.image
+                      ? filterPlayerHR[0]?.image
+                      : '/baseball-analytics/image/emptyPlayer.png'
+                  "
+                />
+                <div class="playerCardText">
+                  <div class="playerCardTitle">
+                    {{
+                      `${filterPlayerHR[0]?.name} #${filterPlayerHR[0]?.number}`
+                    }}
+                  </div>
+                  <div class="playerCardInfo">
+                    {{ `目前全壘打: ${filterPlayerHR[0]?.hr}` }}
+                  </div>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+          <el-col :md="16">
+            <RankTable
+              :rank="'hr'"
+              :loading="loading"
+              :rankLoading="rankLoading"
+              :filterData="filterPlayerHR"
+              @handlePlayer="emits('handlePlayer', $event)"
+            />
+          </el-col>
+        </el-row>
       </el-card>
     </el-collapse-item>
     <el-collapse-item title="打擊率 Top5" name="4">
       <el-card class="rankCard">
-        <RankTable
-          :rank="'avg'"
-          :loading="loading"
-          :rankLoading="rankLoading"
-          :filterData="filterPlayerAVG"
-          @handlePlayer="emits('handlePlayer', $event)"
-        />
+        <el-row>
+          <el-col :md="8">
+            <el-card v-loading="rankLoading || loading" class="playerCard">
+              <div class="playerCardBox">
+                <img
+                  class="playerCardImg"
+                  :src="
+                    filterPlayerAVG[0]?.image
+                      ? filterPlayerAVG[0]?.image
+                      : '/baseball-analytics/image/emptyPlayer.png'
+                  "
+                />
+                <div class="playerCardText">
+                  <div class="playerCardTitle">
+                    {{
+                      `${filterPlayerAVG[0]?.name} #${filterPlayerAVG[0]?.number}`
+                    }}
+                  </div>
+                  <div class="playerCardInfo">
+                    {{ `目前打擊率: ${filterPlayerAVG[0]?.avg.toFixed(3)}` }}
+                  </div>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+          <el-col :md="16">
+            <RankTable
+              :rank="'avg'"
+              :loading="loading"
+              :rankLoading="rankLoading"
+              :filterData="filterPlayerAVG"
+              @handlePlayer="emits('handlePlayer', $event)"
+            />
+          </el-col>
+        </el-row>
       </el-card>
     </el-collapse-item>
     <el-collapse-item title="盜壘 Top5" name="5">
       <el-card class="rankCard">
-        <RankTable
-          :rank="'sb'"
-          :loading="loading"
-          :rankLoading="rankLoading"
-          :filterData="filterPlayerSB"
-          @handlePlayer="emits('handlePlayer', $event)"
-        />
+        <el-row>
+          <el-col :md="8">
+            <el-card v-loading="rankLoading || loading" class="playerCard">
+              <div class="playerCardBox">
+                <img
+                  class="playerCardImg"
+                  :src="
+                    filterPlayerSB[0]?.image
+                      ? filterPlayerSB[0]?.image
+                      : '/baseball-analytics/image/emptyPlayer.png'
+                  "
+                />
+                <div class="playerCardText">
+                  <div class="playerCardTitle">
+                    {{
+                      `${filterPlayerSB[0]?.name} #${filterPlayerSB[0]?.number}`
+                    }}
+                  </div>
+                  <div class="playerCardInfo">
+                    {{ `目前盜壘: ${filterPlayerSB[0]?.sb}` }}
+                  </div>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+          <el-col :md="16">
+            <RankTable
+              :rank="'sb'"
+              :loading="loading"
+              :rankLoading="rankLoading"
+              :filterData="filterPlayerSB"
+              @handlePlayer="emits('handlePlayer', $event)"
+            />
+          </el-col>
+        </el-row>
       </el-card>
     </el-collapse-item>
   </el-collapse>
