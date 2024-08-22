@@ -2,52 +2,41 @@
   <div class="homePage">
     <div class="block">
       <div class="blockTitle">球員列表</div>
-      <el-tabs type="border-card" class="tabsCard">
-        <el-tab-pane label="球員">
-          <el-row>
-            <el-table
-              class="homePageTable"
-              stripe
-              v-loading="loading"
-              :data="players"
-              height="250"
-              style="width: 100%"
-              empty-text="暫無數據"
+      <div>
+        <el-row v-loading="loading">
+          <el-col
+            :xs="12"
+            :sm="8"
+            :md="6"
+            v-for="player in players"
+            :key="player.number"
+          >
+            <el-card
+              shadow="hover"
+              class="playerCard"
+              @click="handlePlayer(player)"
             >
-              <el-table-column
-                fixed
-                prop="number"
-                label="No"
-                width="70"
-                sortable
-              />
-              <el-table-column prop="name" label="球員" width="150">
-                <template #default="{ row }">
-                  <el-button
-                    class="playerNameBtn"
-                    text
-                    size="small"
-                    @click="handlePlayer(row)"
-                  >
-                    <img
-                      :src="
-                        row.img
-                          ? row.img
-                          : '/baseball-analytics/image/icon.jpeg'
-                      "
-                      alt="player"
-                      class="playerImg"
-                    />
-                    {{ row.name }}
-                  </el-button>
-                </template>
-              </el-table-column>
-              <el-table-column prop="age" label="年齡" />
-              <el-table-column prop="position" label="守備位置" />
-            </el-table>
-          </el-row>
-        </el-tab-pane>
-      </el-tabs>
+              <div class="playerInfo">
+                <img
+                  :src="
+                    player.img
+                      ? player.img
+                      : '/baseball-analytics/image/icon.jpeg'
+                  "
+                  alt="player"
+                  class="playerImg"
+                />
+                <div class="cardTitle">
+                  <div class="title">
+                    {{ `${player.name} #${player.number}` }}
+                  </div>
+                  <div class="title">{{ player.position }}</div>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+      </div>
     </div>
     <div class="block">
       <div class="blockTitle">排行榜</div>
@@ -313,10 +302,39 @@ fetchPlayerSheet()
     }
   }
 
-  .homePageTable {
-    border: 2px solid #862633;
-    border-radius: 5px;
-    margin: 10px 0px;
+  .playerCard {
+    cursor: pointer;
+    background-color: #862633;
+    border-radius: 20px;
+    margin: 10px 10px;
+
+    &:hover {
+      background-color: #b15560;
+    }
+
+    .playerInfo {
+      display: flex;
+      align-items: center;
+    }
+
+    .cardTitle {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .playerInfo {
+      flex-direction: column;
+    }
+
+    .cardTitle {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
   }
 
   .title {
@@ -359,8 +377,8 @@ fetchPlayerSheet()
   }
 
   .playerImg {
-    width: 25px;
-    height: 25px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     border: 1px solid black;
     margin: 0px 6px;
