@@ -127,5 +127,9 @@ const performance = ref({
 <style scoped>
 #performanceChart {
   background-color: white;
+  width: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
