@@ -13,9 +13,10 @@
     "deploy": "vite build && gh-pages -d dist"
   },
   "dependencies": {
+    "@vueuse/router": "^11.2.0",
     "element-plus": "^2.7.0",
     "vue": "^3.4.21",
-    "vue-router": "^4.3.0",
+    "vue-router": "^4.4.5",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {

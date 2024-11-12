@@ -6,19 +6,24 @@ import {
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/',
+    path: '/baseball-analytics/',
     name: 'HomePage',
-    component: () => import('@/views/HomePage.vue'),
+    component: () => import('@/pages/HomePage.vue'),
     meta: { title: '首頁' }
+  },
+  {
+    path: '/baseball-analytics/playerInfo',
+    name: 'PlayerInfoPage',
+    component: () => import('@/pages/PlayerInfoPage.vue'),
+    meta: { title: '球員資訊' }
   },
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFoundPage',
-    component: () => import('@/views/NotFoundPage.vue'),
+    component: () => import('@/pages/NotFoundPage.vue'),
     meta: { title: '找不到頁面' }
   }
 ]
-
 export function createRouter() {
   return createVueRouter({
     history: createWebHistory(),

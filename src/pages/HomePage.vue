@@ -19,25 +19,19 @@
       <el-table-column prop="arm" label="傳球" />
     </el-table>
   </el-card>
-  <PlayerInfo
-    :isVisible="isVisible"
-    :playerInfo="playerInfo"
-    @close="isVisible = false"
-  />
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { getPlayers, getplayer } from '@/api/players/index'
+import { getPlayers } from '@/api/players/index'
 import { getGame } from '@/api/games/index'
 import { Player } from '@/api/players/types'
-import PlayerInfo from '@/components/player/playerInfo.vue'
+import { useRouter } from 'vue-router'
 
 const player = ref<Player[]>([])
 const loading = ref(false)
 const sheetId = import.meta.env.VITE_GOOGLE_SHEET_DOC_ID
-const isVisible = ref(false)
-const playerInfo = ref<Player>()
+const router = useRouter()
 
 function fetchPlayerSheet() {
   loading.value = true
@@ -54,17 +48,13 @@ function fetchPlayerSheet() {
 }
 
 function handlePlayer(row: Player) {
-  isVisible.value = true
-  const sheetName = `${row.name}${row.number}`
-  getplayer(sheetId, sheetName)
-    .then((data) => {
-      playerInfo.value = data
+  if (row.name) {
+    router.push({
+      name: 'PlayerInfoPage',
+      query: { player: JSON.stringify(row) }
     })
-    .catch((err) => {
-      console.log(err)
-    })
+  }
 }
-
 function fetchGame() {
   const sheetName = '2024-04-21-復仇者'
   getGame(sheetName)
