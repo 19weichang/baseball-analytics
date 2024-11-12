@@ -28,10 +28,10 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { getPlayers, getplayer } from '../api/players/index'
-import { getGame } from '../api/games/index'
-import { Player } from '../api/players/types'
-import PlayerInfo from '../components/player/playerInfo.vue'
+import { getPlayers, getplayer } from '@/api/players/index'
+import { getGame } from '@/api/games/index'
+import { Player } from '@/api/players/types'
+import PlayerInfo from '@/components/player/playerInfo.vue'
 
 const player = ref<Player[]>([])
 const loading = ref(false)
