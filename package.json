@@ -31,6 +31,7 @@
     "prettier": "^3.2.5",
     "sass": "^1.80.6",
     "typescript": "^5.2.2",
+    "unplugin-auto-import": "^0.18.3",
     "vite": "^5.2.0",
     "vue-tsc": "^2.0.6"
   }

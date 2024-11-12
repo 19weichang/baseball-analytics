@@ -22,7 +22,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
 import { getPlayers } from '@/api/players/index'
 import { getGame } from '@/api/games/index'
 import { Player } from '@/api/players/types'
