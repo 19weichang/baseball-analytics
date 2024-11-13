@@ -1,12 +1,9 @@
 <template>
-  <div
-    class="hamburger"
-    @click="toggleMenu('toggle')"
-  >
+  <div class="hamburger" @click="toggleMenu('toggle')">
     <span class="bar"></span>
   </div>
 
-  <SideBar :show="showSidebar" @close="handleClose"/>
+  <SideBar :show="showSidebar" @close="handleClose" />
 </template>
 
 <script setup>
@@ -58,50 +55,51 @@ function handleClose() {
 </script>
 
 <style lang="scss" scoped>
-  $clickBtn: v-bind(openMenu);
-  $clickBtnMedia: v-bind(openUserMenuMedia);
-  $barColor: v-bind(barColor);
-  $beforeTop: v-bind(beforeTop);
-  $beforeTransform: v-bind(beforeTransform);
-  $afterTop: v-bind(afterTop);
-  $afterTransform: v-bind(afterTransform);
-  .hamburger {
-    height: 3rem;
-    width: 3rem;
-    border-radius: 0.4rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 100000;
-    &:hover {
-      box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset,
-       rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+$clickBtn: v-bind(openMenu);
+$clickBtnMedia: v-bind(openUserMenuMedia);
+$barColor: v-bind(barColor);
+$beforeTop: v-bind(beforeTop);
+$beforeTransform: v-bind(beforeTransform);
+$afterTop: v-bind(afterTop);
+$afterTransform: v-bind(afterTransform);
+.hamburger {
+  height: 3rem;
+  width: 3rem;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100000;
+  &:hover {
+    box-shadow:
+      rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset,
+      rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+  }
+  .bar {
+    width: 1.7rem;
+    height: 2px;
+    background-color: $barColor;
+    display: inline-block;
+    position: relative;
+    transition: backgroud-color 0.5s;
+    &:before,
+    &:after {
+      content: '';
+      position: absolute;
+      width: inherit;
+      height: inherit;
+      background-color: white;
+      transition: all 0.5s;
     }
-    .bar {
-      width: 1.7rem;
-      height: 2px;
-      background-color: $barColor;
-      display: inline-block;
-      position: relative;
-      transition: backgroud-color 0.5s;
-      &:before,
-      &:after {
-        content: '';
-        position: absolute;
-        width: inherit;
-        height: inherit;
-        background-color: white;
-        transition: all 0.5s;
-      }
-      &:before {
-        top: $beforeTop;
-        transform: $beforeTransform;
-      }
-      &:after {
-        top: $afterTop;
-        transform: $afterTransform;
-      }
+    &:before {
+      top: $beforeTop;
+      transform: $beforeTransform;
+    }
+    &:after {
+      top: $afterTop;
+      transform: $afterTransform;
     }
   }
+}
 </style>
