@@ -41,7 +41,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
 import { useRouteQuery } from '@vueuse/router'
 import { getGame } from '@/api/games/index'
 import { Game } from '@/api/games/types'

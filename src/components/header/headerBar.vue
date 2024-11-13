@@ -7,7 +7,7 @@
 </template>
 
 <script lang="js" setup>
-import HamburgerIcon from './HamburgerIcon.vue';
+import HamburgerIcon from './HamburgerIcon.vue'
 
 </script>
 <style lang="scss" scoped>
